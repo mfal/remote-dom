@@ -1247,10 +1247,10 @@ describe('adaptToLegacyRemoteChannel()', () => {
       ]);
 
       // Remove the first child
-      channel(ACTION_REMOVE_CHILD, '2', 0);
+      channel(ACTION_REMOVE_CHILD, '2', 1);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', 1],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1379,10 +1379,10 @@ describe('adaptToLegacyRemoteChannel()', () => {
       ]);
 
       // Remove the first node
-      channel(ACTION_REMOVE_CHILD, '2', 0);
+      channel(ACTION_REMOVE_CHILD, '2', 1);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', 1],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1412,10 +1412,10 @@ describe('adaptToLegacyRemoteChannel()', () => {
       ]);
 
       // Remove the new first node
-      channel(ACTION_REMOVE_CHILD, '2', 0);
+      channel(ACTION_REMOVE_CHILD, '2', 3);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', 3],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
