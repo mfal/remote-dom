@@ -41,9 +41,6 @@ export class RemoteMutationObserver extends MutationObserver {
         const targetId = remoteId(record.target);
 
         if (record.type === 'childList') {
-          const position = record.previousSibling
-            ? indexOf(record.previousSibling, record.target.childNodes) + 1
-            : 0;
 
           record.removedNodes.forEach((node) => {
             disconnectRemoteNode(node);
@@ -51,7 +48,7 @@ export class RemoteMutationObserver extends MutationObserver {
             remoteRecords.push([
               MUTATION_TYPE_REMOVE_CHILD,
               targetId,
-              position,
+              Number(remoteId(node)),
             ]);
           });
 
@@ -60,7 +57,7 @@ export class RemoteMutationObserver extends MutationObserver {
           // We serialize the entire tree when a new node was added, so we don’t want to
           // send additional “insert child” records when we see those descendants — they
           // will already be included the insertion of the parent.
-          record.addedNodes.forEach((node, index) => {
+          record.addedNodes.forEach((node) => {
             if (
               addedNodes.some((addedNode) => {
                 return addedNode === node || addedNode.contains(node);
@@ -76,7 +73,9 @@ export class RemoteMutationObserver extends MutationObserver {
               MUTATION_TYPE_INSERT_CHILD,
               targetId,
               serializeRemoteNode(node),
-              position + index,
+              record.previousSibling
+                ? Number(remoteId(record.previousSibling))
+                : 0,
             ]);
           });
         } else if (record.type === 'characterData') {
@@ -125,6 +124,7 @@ export class RemoteMutationObserver extends MutationObserver {
 
     if (options?.initial !== false && target.childNodes.length > 0) {
       const records: RemoteMutationRecord[] = [];
+      let prevChild = undefined;
 
       for (let i = 0; i < target.childNodes.length; i++) {
         const node = target.childNodes[i]!;
@@ -134,8 +134,10 @@ export class RemoteMutationObserver extends MutationObserver {
           MUTATION_TYPE_INSERT_CHILD,
           ROOT_ID,
           serializeRemoteNode(node),
-          i,
+          prevChild ? Number(remoteId(prevChild)) : 0,
         ]);
+
+        prevChild = node;
       }
 
       this.connection.mutate(records);
@@ -149,12 +151,4 @@ export class RemoteMutationObserver extends MutationObserver {
       ...options,
     });
   }
-}
-
-function indexOf(node: Node, list: NodeList) {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i] === node) return i;
-  }
-
-  return -1;
 }

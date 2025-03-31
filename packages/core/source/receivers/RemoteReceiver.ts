@@ -16,6 +16,7 @@ import type {
   RemoteNodeSerialization,
 } from '../types.ts';
 import type {RemoteReceiverOptions} from './shared.ts';
+import {getNodePosition} from '../utils';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -162,18 +163,19 @@ export class RemoteReceiver {
 
         return implementationMethod(...args);
       },
-      insertChild: (id, child, index) => {
+      insertChild: (id, child, parentRemoteId) => {
         const parent = attached.get(id) as Writable<RemoteReceiverParent>;
 
         const {children} = parent;
+        const position = getNodePosition(children, parentRemoteId) + 1;
 
         const normalizedChild = attach(child, parent);
 
-        if (index === children.length) {
+        if (position === children.length) {
           (children as Writable<typeof children>).push(normalizedChild);
         } else {
           (children as Writable<typeof children>).splice(
-            index,
+            position,
             0,
             normalizedChild,
           );
@@ -184,13 +186,13 @@ export class RemoteReceiver {
 
         runSubscribers(parent);
       },
-      removeChild: (id, index) => {
+      removeChild: (id, remoteId) => {
         const parent = attached.get(id) as Writable<RemoteReceiverParent>;
-
         const {children} = parent;
 
+        const position = getNodePosition(children, remoteId);
         const [removed] = (children as Writable<typeof children>).splice(
-          index,
+          position,
           1,
         );
 
@@ -201,7 +203,6 @@ export class RemoteReceiver {
         parent.version += 1;
 
         runSubscribers(parent);
-
         detach(removed);
       },
       updateProperty: (
