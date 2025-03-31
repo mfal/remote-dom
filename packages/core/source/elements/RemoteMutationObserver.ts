@@ -133,7 +133,7 @@ export class RemoteMutationObserver extends MutationObserver {
           MUTATION_TYPE_INSERT_CHILD,
           ROOT_ID,
           serializeRemoteNode(node),
-          prevChild ? Number(remoteId(prevChild)) : 0,
+          prevChild ? Number(remoteId(prevChild)) + 1 : 0,
         ]);
 
         prevChild = node;
