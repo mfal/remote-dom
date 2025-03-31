@@ -113,7 +113,10 @@ export class DOMRemoteReceiver {
         const existingTimeout = destroyTimeouts.get(id);
         if (existingTimeout) clearTimeout(existingTimeout);
 
-        parent.insertBefore(attach(child), parent.childNodes[position === -1 ? 0 : position] || null);
+        parent.insertBefore(
+          attach(child),
+          parent.childNodes[position === -1 ? 0 : position] || null,
+        );
       },
       removeChild: (id, remoteId) => {
         const parent = id === ROOT_ID ? this.root : attached.get(id)!;

@@ -41,7 +41,6 @@ export class RemoteMutationObserver extends MutationObserver {
         const targetId = remoteId(record.target);
 
         if (record.type === 'childList') {
-
           record.removedNodes.forEach((node) => {
             disconnectRemoteNode(node);
 

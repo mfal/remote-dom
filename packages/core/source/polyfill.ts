@@ -41,7 +41,9 @@ hooks.removeChild = (parent, node) => {
 
   disconnectRemoteNode(node);
 
-  connection.mutate([[MUTATION_TYPE_REMOVE_CHILD, remoteId(parent), Number(remoteId(node))]]);
+  connection.mutate([
+    [MUTATION_TYPE_REMOVE_CHILD, remoteId(parent), Number(remoteId(node))],
+  ]);
 };
 
 hooks.setText = (text, data) => {
