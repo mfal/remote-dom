@@ -25,6 +25,7 @@ export type RenderExample =
   | 'htm'
   | 'preact'
   | 'react'
+  | 'react-mutations'
   | 'svelte'
   | 'vue'
   | 'react-remote-ui';
