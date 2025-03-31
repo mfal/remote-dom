@@ -156,6 +156,7 @@ export function ControlPanel({
           <option value="vanilla">“Vanilla” DOM</option>
           <option value="preact">Preact</option>
           <option value="react">React</option>
+          <option value="react-mutations">React Mutations</option>
           <option value="svelte">Svelte</option>
           <option value="vue">Vue</option>
           <option value="htm">htm</option>
@@ -194,6 +195,7 @@ const EXAMPLE_FILE_NAMES = new Map<RenderExample, string>([
   ['htm', 'htm.ts'],
   ['preact', 'preact.tsx'],
   ['react', 'react.tsx'],
+  ['react-mutations', 'react-mutations.tsx'],
   ['svelte', 'App.svelte'],
   ['vue', 'App.vue'],
 ]);
