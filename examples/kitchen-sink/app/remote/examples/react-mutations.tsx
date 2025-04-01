@@ -36,7 +36,7 @@ const Button = createRemoteComponent('ui-button', ButtonElement, {
 });
 
 
-const DemoComponent: FC<PropsWithChildren> = ({ children }) => {
+const TimerComponent: FC<PropsWithChildren> = ({ children }) => {
   const ellapsed = useTimer(100);
   if (ellapsed) {
     return <Button>Button {children}</Button>;
@@ -44,11 +44,14 @@ const DemoComponent: FC<PropsWithChildren> = ({ children }) => {
   return <Text>Loading {children}</Text>;
 };
 
-function App({api}: {api: RenderAPI}) {
+function App(_props: {api: RenderAPI}) {
   return (
     <Stack spacing>
-      <DemoComponent>1</DemoComponent>
-      <DemoComponent>2</DemoComponent>
+      <TimerComponent>1</TimerComponent>
+      <TimerComponent>2</TimerComponent>
+      <TimerComponent>3</TimerComponent>
+      <TimerComponent>4</TimerComponent>
+      <TimerComponent>5</TimerComponent>
     </Stack>
   );
 }

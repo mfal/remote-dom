@@ -1,8 +1,8 @@
 import '@remote-dom/core/polyfill';
 
-import {describe, expect, it, vi, type Mocked} from 'vitest';
+import { describe, expect, it, vi, type Mocked } from 'vitest';
 
-import {adaptToLegacyRemoteChannel} from '../adapter/host.ts';
+import { adaptToLegacyRemoteChannel } from '../adapter/host.ts';
 
 import {
   ACTION_INSERT_CHILD,
@@ -20,13 +20,13 @@ import {
   MUTATION_TYPE_REMOVE_CHILD,
   MUTATION_TYPE_UPDATE_PROPERTY,
   MUTATION_TYPE_UPDATE_TEXT,
+  NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
   NODE_TYPE_TEXT,
-  NODE_TYPE_COMMENT,
   ROOT_ID,
 } from '@remote-dom/core';
 
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import { RemoteReceiver } from '@remote-dom/core/receivers';
 
 describe('adaptToLegacyRemoteChannel()', () => {
   describe('ACTION_MOUNT', () => {
@@ -639,7 +639,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       );
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '1', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '1', '2'],
         [
           MUTATION_TYPE_INSERT_CHILD,
           '1',
@@ -834,7 +834,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, '2', 0);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', '1'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -881,7 +881,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, '3', 1);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '3', 1],
+        [MUTATION_TYPE_REMOVE_CHILD, '3', '2'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1250,7 +1250,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, '2', 0);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', '1'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1277,7 +1277,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, '2', 0);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', '0'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1382,7 +1382,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, '2', 0);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', '1'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1415,7 +1415,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, '2', 0);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, '2', 0],
+        [MUTATION_TYPE_REMOVE_CHILD, '2', '3'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([
@@ -1467,7 +1467,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
       channel(ACTION_REMOVE_CHILD, ROOT_ID, 0);
 
       expect(receiver.connection.mutate).toHaveBeenCalledWith([
-        [MUTATION_TYPE_REMOVE_CHILD, ROOT_ID, 0],
+        [MUTATION_TYPE_REMOVE_CHILD, ROOT_ID, '1'],
       ]);
 
       expect(receiver.root.children).toStrictEqual([]);

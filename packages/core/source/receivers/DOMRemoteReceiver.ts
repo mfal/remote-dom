@@ -1,15 +1,15 @@
-import {createRemoteConnection, type RemoteConnection} from '../connection.ts';
+import { createRemoteConnection, type RemoteConnection } from '../connection.ts';
 import {
-  NODE_TYPE_TEXT,
   NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
+  NODE_TYPE_TEXT,
   ROOT_ID,
-  UPDATE_PROPERTY_TYPE_PROPERTY,
   UPDATE_PROPERTY_TYPE_ATTRIBUTE,
   UPDATE_PROPERTY_TYPE_EVENT_LISTENER,
+  UPDATE_PROPERTY_TYPE_PROPERTY,
 } from '../constants.ts';
-import type {RemoteNodeSerialization} from '../types.ts';
-import type {RemoteReceiverOptions} from './shared.ts';
+import type { RemoteNodeSerialization } from '../types.ts';
+import type { RemoteReceiverOptions } from './shared.ts';
 
 const REMOTE_IDS = new WeakMap<Node, string>();
 const REMOTE_PROPERTIES = new WeakMap<Node, Record<string, any>>();
@@ -113,19 +113,18 @@ export class DOMRemoteReceiver {
 
         parent.insertBefore(attach(child), parent.childNodes[index] || null);
       },
-      removeChild: (id, index) => {
-        const parent = id === ROOT_ID ? this.root : attached.get(id)!;
-        const child = parent.childNodes[index]!;
+      removeChild: (parentId, id) => {
+        const child = attached.get(id) as ChildNode;
         child.remove();
 
         if (cache?.maxAge) {
-          const existingTimeout = destroyTimeouts.get(id);
+          const existingTimeout = destroyTimeouts.get(parentId);
           if (existingTimeout) clearTimeout(existingTimeout);
 
           const timeout = setTimeout(() => {
             detach(child);
           }, cache.maxAge);
-          destroyTimeouts.set(id, timeout as any);
+          destroyTimeouts.set(parentId, timeout as any);
         } else {
           detach(child);
         }

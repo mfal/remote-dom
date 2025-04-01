@@ -1,4 +1,4 @@
-import {createRemoteConnection, type RemoteConnection} from '../connection.ts';
+import { createRemoteConnection, type RemoteConnection } from '../connection.ts';
 import {
   NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
@@ -10,12 +10,12 @@ import {
   UPDATE_PROPERTY_TYPE_PROPERTY,
 } from '../constants.ts';
 import type {
-  RemoteTextSerialization,
   RemoteCommentSerialization,
   RemoteElementSerialization,
   RemoteNodeSerialization,
+  RemoteTextSerialization,
 } from '../types.ts';
-import type {RemoteReceiverOptions} from './shared.ts';
+import type { RemoteReceiverOptions } from './shared.ts';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -184,12 +184,14 @@ export class RemoteReceiver {
 
         runSubscribers(parent);
       },
-      removeChild: (id, index) => {
-        const parent = attached.get(id) as Writable<RemoteReceiverParent>;
+      removeChild: (parentId, id) => {
+        const parent = attached.get(parentId) as Writable<RemoteReceiverParent>;
+        const children = parent.children as Writable<RemoteReceiverNode[]>;
 
-        const {children} = parent;
+        const node = attached.get(id) as Writable<RemoteReceiverNode>;
+        const index = parent.children.indexOf(node);
 
-        const [removed] = (children as Writable<typeof children>).splice(
+        const [removed] = children.splice(
           index,
           1,
         );

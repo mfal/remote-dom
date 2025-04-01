@@ -1,18 +1,19 @@
 import {
-  remoteId,
-  connectRemoteNode,
-  disconnectRemoteNode,
-  serializeRemoteNode,
-  REMOTE_IDS,
-} from './internals.ts';
-import {
-  ROOT_ID,
   MUTATION_TYPE_INSERT_CHILD,
   MUTATION_TYPE_REMOVE_CHILD,
-  MUTATION_TYPE_UPDATE_TEXT,
   MUTATION_TYPE_UPDATE_PROPERTY,
+  MUTATION_TYPE_UPDATE_TEXT,
+  NODE_TYPE_COMMENT,
+  ROOT_ID,
 } from '../constants.ts';
-import type {RemoteConnection, RemoteMutationRecord} from '../types.ts';
+import type { RemoteConnection, RemoteMutationRecord } from '../types.ts';
+import {
+  connectRemoteNode,
+  disconnectRemoteNode,
+  REMOTE_IDS,
+  remoteId,
+  serializeRemoteNode,
+} from './internals.ts';
 
 /**
  * Builds on the browser’s [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
@@ -51,8 +52,10 @@ export class RemoteMutationObserver extends MutationObserver {
             remoteRecords.push([
               MUTATION_TYPE_REMOVE_CHILD,
               targetId,
-              position,
+              remoteId(node),
             ]);
+
+            addedNodes.splice(addedNodes.indexOf(node), 1);
           });
 
           // A mutation observer will queue some changes, so we might get one record
@@ -61,10 +64,12 @@ export class RemoteMutationObserver extends MutationObserver {
           // send additional “insert child” records when we see those descendants — they
           // will already be included the insertion of the parent.
           record.addedNodes.forEach((node, index) => {
+            if (node.nodeType === NODE_TYPE_COMMENT) {
+              return;
+            }
+
             if (
-              addedNodes.some((addedNode) => {
-                return addedNode === node || addedNode.contains(node);
-              })
+              addedNodes.some(addedNode => addedNode.contains(node))
             ) {
               return;
             }
