@@ -70,6 +70,7 @@ export function adaptToLegacyRemoteChannel(
   connection: RemoteConnection,
   options?: LegacyRemoteChannelOptions,
 ): LegacyRemoteChannel {
+  // child node list of a given parent
   const tree = new Map<string, {id: string; slot?: string}[]>();
 
   function mutate(records: RemoteMutationRecord[]) {
@@ -112,8 +113,8 @@ export function adaptToLegacyRemoteChannel(
     if (!tree.has(parentId)) {
       tree.set(parentId, []);
     }
-    const parentNode = tree.get(parentId)!;
-    parentNode.splice(index, 0, {
+    const siblings = tree.get(parentId)!;
+    siblings.splice(index, 0, {
       id: node.id,
       slot: 'attributes' in node ? node.attributes?.slot : undefined,
     });
@@ -179,8 +180,9 @@ export function adaptToLegacyRemoteChannel(
         const records = [];
 
         const siblings = tree.get(parentId) ?? [];
+        const relevantSiblings = [...siblings];
 
-        const existingChildIndex = siblings.findIndex(
+        const existingChildIndex = relevantSiblings.findIndex(
           ({id}) => id === child.id,
         );
 
@@ -190,15 +192,17 @@ export function adaptToLegacyRemoteChannel(
             parentId,
             child.id,
           ] satisfies RemoteMutationRecord);
+
+          relevantSiblings.splice(existingChildIndex, 1);
         }
+
+        const nextSibling = relevantSiblings[index];
 
         records.push([
           MUTATION_TYPE_INSERT_CHILD,
           parentId,
           adaptLegacyNodeSerialization(child, options),
-          existingChildIndex >= 0
-            ? siblings.filter((s) => s.id !== child.id)[index]?.id
-            : siblings[index]?.id,
+          nextSibling?.id,
         ] satisfies RemoteMutationRecord);
 
         mutate(records);
@@ -230,12 +234,12 @@ export function adaptToLegacyRemoteChannel(
       case LEGACY_ACTION_UPDATE_PROPS: {
         const [id, props] =
           payload as LegacyActionArgumentMap[typeof LEGACY_ACTION_UPDATE_PROPS];
-        const parentNode = tree.get(id);
+        const siblings = tree.get(id);
 
         const records = [];
 
         for (const [key, value] of Object.entries(props)) {
-          const slotNodeId = parentNode?.find(({slot}) => slot === key)?.id;
+          const slotNodeId = siblings?.find(({slot}) => slot === key)?.id;
 
           if (isFragment(value)) {
             if (slotNodeId !== undefined) {
