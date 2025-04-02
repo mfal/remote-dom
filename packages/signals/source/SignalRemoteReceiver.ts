@@ -20,8 +20,8 @@ import {
   type RemoteElementSerialization,
   type RemoteNodeSerialization,
   type RemoteTextSerialization,
-} from '@remote-dom/core';
-import type {RemoteReceiverOptions} from '@remote-dom/core/receivers';
+} from '@mittwald/remote-dom-core';
+import type {RemoteReceiverOptions} from '@mittwald/remote-dom-core/receivers';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -360,7 +360,7 @@ export class SignalRemoteReceiver {
    * });
    *
    * // In the remote environment:
-   * import {RemoteRootElement} from '@remote-dom/core/elements';
+   * import {RemoteRootElement} from '@mittwald/remote-dom-core/elements';
    *
    * customElements.define('remote-root', RemoteRootElement);
    *

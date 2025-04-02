@@ -1,5 +1,5 @@
-import '@remote-dom/core/polyfill';
-import '@remote-dom/react/polyfill';
+import '@mittwald/remote-dom-core/polyfill';
+import '@mittwald/remote-dom-react/polyfill';
 
 import {ThreadWebWorker} from '@quilted/threads';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@remote-dom/core",
+  "name": "@mittwald/remote-dom-core",
   "type": "module",
   "license": "MIT",
   "description": "A collection of DOM-based utilities for synchronizing elements between JavaScript environments",
@@ -7,7 +7,7 @@
     "access": "public",
     "@remote-dom/registry": "https://registry.npmjs.org"
   },
-  "version": "1.7.0",
+  "version": "1.7.0+mittwald-001",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -16,6 +16,7 @@
     "url": "https://github.com/Shopify/remote-dom",
     "directory": "packages/core"
   },
+  "files": ["build", "source"],
   "exports": {
     ".": {
       "types": "./build/typescript/index.d.ts",
@@ -80,7 +81,7 @@
     "build": "rollup --config ./rollup.config.js"
   },
   "dependencies": {
-    "@remote-dom/polyfill": "workspace:^1.4.2",
+    "@remote-dom/polyfill": "^1.4.2",
     "htm": "^3.1.1"
   },
   "peerDependencies": {

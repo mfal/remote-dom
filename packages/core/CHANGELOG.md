@@ -1,4 +1,4 @@
-# @remote-dom/core
+# @mittwald/remote-dom-core
 
 ## 1.7.0
 
@@ -32,10 +32,10 @@
 
   This prevents the polyfill from interfering with globals like `globalThis.addEventListener`, which you may need to manage the communication between a sandboxed environment and the main thread.
 
-  In the future, we will likely change the polyfill to require you to explicitly install the polyfill, instead of it being done automatically when you `@remote-dom/core/polyfill`. At that point, we will reintroduce the ability to more faithfully replicate more DOM globals, like having `globalThis`, `globalThis.self`, and `globalThis.window` all refer to the same polyfilled `Window` object. To install this polyfill today and get back to the behavior introduced by [this PR](https://github.com/Shopify/remote-dom/pull/470), you can call the new `Window.setGlobalThis()` method:
+  In the future, we will likely change the polyfill to require you to explicitly install the polyfill, instead of it being done automatically when you `@mittwald/remote-dom-core/polyfill`. At that point, we will reintroduce the ability to more faithfully replicate more DOM globals, like having `globalThis`, `globalThis.self`, and `globalThis.window` all refer to the same polyfilled `Window` object. To install this polyfill today and get back to the behavior introduced by [this PR](https://github.com/Shopify/remote-dom/pull/470), you can call the new `Window.setGlobalThis()` method:
 
   ```js
-  import {window, Window} from '@remote-dom/core/polyfill';
+  import {window, Window} from '@mittwald/remote-dom-core/polyfill';
 
   Window.setGlobalThis(window);
   ```
@@ -54,7 +54,7 @@
   Previously, Remote DOM only offered “remote properties” as a way to synchronize element state between the host and remote environments. These remote properties effectively synchronize a subset of a custom element’s instance properties. The `RemoteElement` class offers [a declarative way to define the properties that should be synchronized](/packages/core/README.md#remote-properties).
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteProperties() {
@@ -81,7 +81,7 @@
   Similarly, a remote property can be automatically updated when adding an event listener based on a conventional `on` property naming prefix:
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteProperties() {
@@ -107,7 +107,7 @@
   These utilities are handy, but they don’t align with patterns in native DOM elements, particularly when it comes to events. Now, both of these can be represented in a fashion that is more conventional in HTML. The `remoteAttributes` configuration allows you to define a set of element attributes that will be synchronized directly the host environment, instead of being treated as instance properties:
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteAttributes() {
@@ -135,7 +135,7 @@
   Similarly, the `remoteEvents` configuration allows you to define a set of event listeners that will be synchronized directly with the host environment:
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteEvents() {

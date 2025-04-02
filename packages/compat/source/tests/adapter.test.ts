@@ -1,4 +1,4 @@
-import '@remote-dom/core/polyfill';
+import '@mittwald/remote-dom-core/polyfill';
 
 import {describe, expect, it, vi, type Mocked} from 'vitest';
 
@@ -24,9 +24,9 @@ import {
   NODE_TYPE_ELEMENT,
   NODE_TYPE_TEXT,
   ROOT_ID,
-} from '@remote-dom/core';
+} from '@mittwald/remote-dom-core';
 
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 describe('adaptToLegacyRemoteChannel()', () => {
   describe('ACTION_MOUNT', () => {

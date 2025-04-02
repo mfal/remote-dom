@@ -12,7 +12,7 @@ type DOMRemoteReceiverOptions = NonNullable<
  *
  * @example
  * ```ts
- * import {RemoteReceiverElement} from '@remote-dom/core/elements';
+ * import {RemoteReceiverElement} from '@mittwald/remote-dom-core/elements';
  *
  * customElements.define('remote-receiver', RemoteReceiverElement);
  *

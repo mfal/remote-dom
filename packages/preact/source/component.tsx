@@ -4,7 +4,7 @@ import type {
   RemoteElement,
   RemoteElementConstructor,
   RemoteEventListenersFromElementConstructor,
-} from '@remote-dom/core/elements';
+} from '@mittwald/remote-dom-core/elements';
 
 import type {
   RemoteComponentPropsFromElementConstructor,

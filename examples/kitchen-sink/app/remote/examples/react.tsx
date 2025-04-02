@@ -3,7 +3,7 @@
 
 import {useState, useRef} from 'react';
 import {createRoot} from 'react-dom/client';
-import {createRemoteComponent} from '@remote-dom/react';
+import {createRemoteComponent} from '@mittwald/remote-dom-react';
 
 import type {RenderAPI} from '../../types.ts';
 import {

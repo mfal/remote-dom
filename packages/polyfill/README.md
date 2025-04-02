@@ -2,7 +2,7 @@
 
 A polyfill for the browser APIs used by Remote DOM. This allows you to use Remote DOM in environments that don’t have a native DOM, like [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
 
-This package provides a low-level polyfill, with hooks that allow other libraries to intercept changes to the DOM. Unless you know you need this package, you probably want to import from [`@remote-dom/core/polyfill`](../core/README.md#remote-domcorepolyfill) instead, which uses the hooks provided by this library to automatically synchronize remote elements between environments.
+This package provides a low-level polyfill, with hooks that allow other libraries to intercept changes to the DOM. Unless you know you need this package, you probably want to import from [`@mittwald/remote-dom-core/polyfill`](../core/README.md#remote-domcorepolyfill) instead, which uses the hooks provided by this library to automatically synchronize remote elements between environments.
 
 ## Installation
 

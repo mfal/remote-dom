@@ -5,9 +5,9 @@ Utilities for rendering Remote DOM elements using [Preact](https://preactjs.com/
 ## Installation
 
 ```sh
-npm install @remote-dom/core @remote-dom/preact --save # npm
-pnpm install @remote-dom/core @remote-dom/preact --save # pnpm
-yarn add @remote-dom/core @remote-dom/preact # yarn
+npm install @mittwald/remote-dom-core @remote-dom/preact --save # npm
+pnpm install @mittwald/remote-dom-core @remote-dom/preact --save # pnpm
+yarn add @mittwald/remote-dom-core @remote-dom/preact # yarn
 ```
 
 ## Usage
@@ -18,11 +18,11 @@ This library provides helpers for both the “host” and “remote” environme
 
 #### `createRemoteComponent()`
 
-Preact has built-in support for web components, so you can use `@remote-dom/core` with Preact without any additional setup:
+Preact has built-in support for web components, so you can use `@mittwald/remote-dom-core` with Preact without any additional setup:
 
 ```ts
 import {h, render} from 'preact';
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 // Define your remote element...
 // @see https://github.com/Shopify/remote-dom/tree/main/packages/core/README.md#remoteelement
@@ -64,7 +64,7 @@ Custom Preact components generally expose events as callback props on the compon
 Imagine a `ui-card` element with a clickable header. When clicked, the card will emit an `expand` event to the remote environment, and reveal the children of the `ui-card` element to the user. First, we define our custom element:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteEvents() {
@@ -105,7 +105,7 @@ The `createRemoteComponent` helper also supports mapping slotted children to Pre
 For example, our `ui-card` custom element could take a `header` slot for customizing the title of the card:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteSlots() {
@@ -242,7 +242,7 @@ const Card = createRemoteComponentRenderer(function Card({
 Like with creating a [Preact wrapper in the remote environment with `createRemoteComponent()`](#event-listener-props), a host using Preact likely wants to map event listeners to conventional Preact callback props. Like with creating a Preact wrapper for the remote environment, let’s return to our `ui-card` example. To refresh, we are imagining a collapsible card element that will emit an `expand` event to the remote environment when its contents are revealed. In the remote environment, our custom element would be defined like this:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteEvents() {
@@ -314,7 +314,7 @@ If your event bubbles, be careful not to call the callback unless the matching r
 // Remote environment: two elements that can emit the same event, each with
 // an event listener attached:
 
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteEvents() {

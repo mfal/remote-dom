@@ -19,12 +19,12 @@ import {
  * Builds on the browser’s [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
  * to detect changes in a remote element, and to communicate those changes in a way
  * that Remote DOM can understand. You create this object from a “remote
- * connection”, which you’ll generally get from the [`@remote-dom/core/receiver`](/packages/core#remote-domcorereceiver)
+ * connection”, which you’ll generally get from the [`@mittwald/remote-dom-core/receiver`](/packages/core#remote-domcorereceiver)
  * package. Then, you’ll observe changes in the HTML element that contains your
  * tree of remote elements.
  *
  * @example
- * import {RemoteMutationObserver} from '@remote-dom/core/elements';
+ * import {RemoteMutationObserver} from '@mittwald/remote-dom-core/elements';
  *
  * const observer = new RemoteMutationObserver(connection);
  *

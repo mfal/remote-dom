@@ -12,13 +12,13 @@
     </div>
 
     <script type="module">
-      import {RemoteElement} from '@remote-dom/core/elements';
+      import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
       // We need to define our `ui-button` element so it can be synchronized
       // with the host environment.
       //
       // For full details on defining remote elements, see the documentation
-      // for `@remote-dom/core/elements`:
+      // for `@mittwald/remote-dom-core/elements`:
       // https://github.com/Shopify/remote-dom/tree/main/packages/core#elements
       class UIButton extends RemoteElement {
         static get remoteAttributes() {
@@ -59,7 +59,7 @@
     </script>
 
     <script type="module">
-      import {RemoteMutationObserver} from '@remote-dom/core/elements';
+      import {RemoteMutationObserver} from '@mittwald/remote-dom-core/elements';
       import {ThreadNestedIframe} from '@quilted/threads';
 
       const root = document.querySelector('#root');

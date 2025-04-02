@@ -1,6 +1,6 @@
 /**
  * Options that are useful for all remote receiver implementations. All of the
- * receivers in `@remote-dom/core/receivers` accept these options.
+ * receivers in `@mittwald/remote-dom-core/receivers` accept these options.
  */
 export interface RemoteReceiverOptions {
   /**

@@ -1,4 +1,4 @@
-# @remote-dom/react
+# @mittwald/remote-dom-react
 
 ## 1.2.2
 
@@ -21,7 +21,7 @@
   Previously, Remote DOM only offered “remote properties” as a way to synchronize element state between the host and remote environments. These remote properties effectively synchronize a subset of a custom element’s instance properties. The `RemoteElement` class offers [a declarative way to define the properties that should be synchronized](/packages/core/README.md#remote-properties).
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteProperties() {
@@ -48,7 +48,7 @@
   Similarly, a remote property can be automatically updated when adding an event listener based on a conventional `on` property naming prefix:
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteProperties() {
@@ -74,7 +74,7 @@
   These utilities are handy, but they don’t align with patterns in native DOM elements, particularly when it comes to events. Now, both of these can be represented in a fashion that is more conventional in HTML. The `remoteAttributes` configuration allows you to define a set of element attributes that will be synchronized directly the host environment, instead of being treated as instance properties:
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteAttributes() {
@@ -102,7 +102,7 @@
   Similarly, the `remoteEvents` configuration allows you to define a set of event listeners that will be synchronized directly with the host environment:
 
   ```ts
-  import {RemoteElement} from '@remote-dom/core/elements';
+  import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
   class MyElement extends RemoteElement {
     static get remoteEvents() {
@@ -169,7 +169,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`2479b21`](https://github.com/Shopify/remote-dom/commit/2479b21406f6149063bfc095dbb6c3a019386403)]:
-  - @remote-dom/core@1.5.0
+  - @mittwald/remote-dom-core@1.5.0
 
 ## 1.1.0
 
@@ -180,7 +180,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`3bec698`](https://github.com/Shopify/remote-dom/commit/3bec6983756c4b8a6834a037ac520438ef59d28f)]:
-  - @remote-dom/core@1.4.0
+  - @mittwald/remote-dom-core@1.4.0
 
 ## 1.0.2
 
@@ -203,7 +203,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`37be652`](https://github.com/Shopify/remote-dom/commit/37be652f288d1eec170c0be13b2da516f8db5dcf)]:
-  - @remote-dom/core@1.0.0
+  - @mittwald/remote-dom-core@1.0.0
 
 ## 0.1.3
 
@@ -222,7 +222,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`9576a72`](https://github.com/Shopify/remote-dom/commit/9576a72fa354481621c53efde4169829fe9bfabf)]:
-  - @remote-dom/core@0.1.1
+  - @mittwald/remote-dom-core@0.1.1
 
 ## 0.1.0
 
@@ -233,7 +233,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`7061ded`](https://github.com/Shopify/remote-dom/commit/7061ded1da4699c6dd6a820eeb940a8af7c66d82)]:
-  - @remote-dom/core@0.1.0
+  - @mittwald/remote-dom-core@0.1.0
 
 ## 0.0.2
 
@@ -242,4 +242,4 @@
 - [#251](https://github.com/Shopify/remote-dom/pull/251) [`5939cca`](https://github.com/Shopify/remote-dom/commit/5939cca8112417124327bd26f9e2c21f4bf9b20a) Thanks [@lemonmade](https://github.com/lemonmade)! - Test version bump
 
 - Updated dependencies [[`5939cca`](https://github.com/Shopify/remote-dom/commit/5939cca8112417124327bd26f9e2c21f4bf9b20a), [`8e1fad4`](https://github.com/Shopify/remote-dom/commit/8e1fad4a00cfe68ff1594fbabeec10c29958685f)]:
-  - @remote-dom/core@0.0.2
+  - @mittwald/remote-dom-core@0.0.2

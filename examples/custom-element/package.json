@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "@quilted/threads": "^3.0.0",
-    "@remote-dom/core": "workspace:*"
+    "@mittwald/remote-dom-core": "workspace:*"
   }
 }

@@ -20,7 +20,7 @@ import {
  *
  * @example
  * ```ts
- * import {RemoteRootElement} from '@remote-dom/core/elements';
+ * import {RemoteRootElement} from '@mittwald/remote-dom-core/elements';
  *
  * customElements.define('remote-root', RemoteRootElement);
  *

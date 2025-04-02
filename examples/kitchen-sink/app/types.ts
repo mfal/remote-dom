@@ -1,4 +1,4 @@
-import type {RemoteConnection} from '@remote-dom/core';
+import type {RemoteConnection} from '@mittwald/remote-dom-core';
 import {RemoteChannel} from '@remote-ui/core';
 
 /**

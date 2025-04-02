@@ -23,7 +23,7 @@ You can migrate to use a Remote DOM [`RemoteReceiver`](#remotereceiver), [`DOMRe
 You can adapt a `RemoteConnection` to a `RemoteChannel` using this library’s `adaptToLegacyRemoteChannel()` function. This function takes a `RemoteConnection` and returns a `RemoteChannel`, which allows you to use a Remote DOM receiver class on the host, even if the remote environment is using `remote-ui`. This same technique works regardless of whether you are using the [`RemoteReceiver`](#remotereceiver), [`DOMRemoteReceiver`](#domremotereceiver), or [`SignalRemoteReceiver`](/packages/signals/README.md#signalremotereceiver) class.
 
 ```ts
-import {DOMRemoteReceiver} from '@remote-dom/core/receivers';
+import {DOMRemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 import {adaptToLegacyRemoteChannel} from '@remote-dom/compat';
 
 const receiver = new DOMRemoteReceiver();

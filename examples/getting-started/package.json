@@ -7,6 +7,6 @@
     "start": "vite"
   },
   "dependencies": {
-    "@remote-dom/core": "workspace:*"
+    "@mittwald/remote-dom-core": "workspace:*"
   }
 }

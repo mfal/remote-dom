@@ -1,32 +1,32 @@
-# `@remote-dom/react`
+# `@mittwald/remote-dom-react`
 
 Utilities for rendering Remote DOM elements using [React](https://reactjs.org/).
 
 ## Installation
 
 ```sh
-npm install @remote-dom/core @remote-dom/react --save # npm
-pnpm install @remote-dom/core @remote-dom/react --save # pnpm
-yarn add @remote-dom/core @remote-dom/react # yarn
+npm install @mittwald/remote-dom-core @mittwald/remote-dom-react --save # npm
+pnpm install @mittwald/remote-dom-core @mittwald/remote-dom-react --save # pnpm
+yarn add @mittwald/remote-dom-core @mittwald/remote-dom-react # yarn
 ```
 
 ## Usage
 
 This library provides helpers for both the “host” and “remote” environments.
 
-The `@remote-dom/react` entry provides wrappers for [`RemoteElement` subclasses](../core/README.md#remoteelement) that add some nice React-specific features on top of core Remote DOM library. Additionally, React DOM checks for a few browser globals that are not covered in the [core DOM polyfill](/packages/core/README.md#remote-domcorepolyfill). If you are using React in a Web Worker, you will also need to import [`@remote-dom/react/polyfill`](#polyfill) _before_ `react-dom` to ensure that these globals are available.
+The `@mittwald/remote-dom-react` entry provides wrappers for [`RemoteElement` subclasses](../core/README.md#remoteelement) that add some nice React-specific features on top of core Remote DOM library. Additionally, React DOM checks for a few browser globals that are not covered in the [core DOM polyfill](/packages/core/README.md#remote-domcorepolyfill). If you are using React in a Web Worker, you will also need to import [`@mittwald/remote-dom-react/polyfill`](#polyfill) _before_ `react-dom` to ensure that these globals are available.
 
-The `@remote-dom/react/host` provides the [`RemoteReceiver` class](../core/README.md#remotereceiver) and [`RemoteRootRenderer` component](#remoterootreceiver), which are used to render a tree of remote elements to the host environment using React.
+The `@mittwald/remote-dom-react/host` provides the [`RemoteReceiver` class](../core/README.md#remotereceiver) and [`RemoteRootRenderer` component](#remoterootreceiver), which are used to render a tree of remote elements to the host environment using React.
 
 ### Remote
 
 #### Polyfill
 
-Some versions of React DOM check for a few specific browser globals on initialization. If you are polyfilling the DOM using [`@remote-dom/core/polyfill`](/packages/core/README.md#remote-domcorepolyfill), you will also need to import `@remote-dom/react/polyfill` _before_ `react-dom` to ensure that these globals are available.
+Some versions of React DOM check for a few specific browser globals on initialization. If you are polyfilling the DOM using [`@mittwald/remote-dom-core/polyfill`](/packages/core/README.md#remote-domcorepolyfill), you will also need to import `@mittwald/remote-dom-react/polyfill` _before_ `react-dom` to ensure that these globals are available.
 
 ```tsx
-import '@remote-dom/core/polyfill';
-import '@remote-dom/react/polyfill';
+import '@mittwald/remote-dom-core/polyfill';
+import '@mittwald/remote-dom-react/polyfill';
 
 import {createRoot} from 'react-dom/client';
 
@@ -39,7 +39,7 @@ As of version 18, React has minimal support for custom elements. To make the Rea
 
 ```tsx
 import {createRoot} from 'react-dom/client';
-import {createRemoteComponent} from '@remote-dom/react';
+import {createRemoteComponent} from '@mittwald/remote-dom-react';
 
 const MyElementComponent = createRemoteComponent('my-element', MyElement);
 
@@ -57,7 +57,7 @@ Custom React components generally expose events as callback props on the compone
 Imagine a `ui-card` element with a clickable header. When clicked, the header will emit an `expand` event to the remote environment, and reveal the children of the `ui-card` element to the user. First, we define our custom element:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteEvents() {
@@ -98,7 +98,7 @@ The `createRemoteComponent` helper also supports mapping slotted children to Rea
 For example, our `ui-card` custom element could take a `header` slot for customizing the title of the card:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteSlots() {
@@ -116,7 +116,7 @@ The `createRemoteComponent()` wrapper will allow you to pass a `header` prop to 
 
 ```tsx
 import {createRoot} from 'react-dom/client';
-import {createRemoteComponent} from '@remote-dom/react';
+import {createRemoteComponent} from '@mittwald/remote-dom-react';
 
 const Card = createRemoteComponent('ui-card', CardElement);
 const Text = createRemoteComponent('ui-text', TextElement);
@@ -147,7 +147,7 @@ To disable this behavior, you can pass `{slotProps: {wrapper: false}}` option to
 
 ```tsx
 import {createRoot} from 'react-dom/client';
-import {createRemoteComponent} from '@remote-dom/react';
+import {createRemoteComponent} from '@mittwald/remote-dom-react';
 
 const Card = createRemoteComponent('ui-card', CardElement, {
   slotProps: {
@@ -174,7 +174,7 @@ createRoot(document.querySelector('#root')).render(
 
 #### `RemoteReceiver`
 
-The `@remote-dom/react/host` package re-exports the [`RemoteReceiver` class from `@remote-dom/core`](../core/README.md#remotereceiver). This object will store the state of the remote tree of elements, and the [`RemoteRootRenderer` component](#remoterootrenderer) expects to receive an instance of this class in order to map the remote tree to React components.
+The `@mittwald/remote-dom-react/host` package re-exports the [`RemoteReceiver` class from `@mittwald/remote-dom-core`](../core/README.md#remotereceiver). This object will store the state of the remote tree of elements, and the [`RemoteRootRenderer` component](#remoterootrenderer) expects to receive an instance of this class in order to map the remote tree to React components.
 
 #### `createRemoteComponentRenderer()`
 
@@ -186,7 +186,7 @@ The [`RemoteRootRenderer` component](#remoterootrenderer) needs a map of which R
 - The `children` of the remote element, where any children with a `slot` attribute are mapped to a prop with the same name
 
 ```tsx
-import {createRemoteComponentRenderer} from '@remote-dom/react/host';
+import {createRemoteComponentRenderer} from '@mittwald/remote-dom-react/host';
 
 // Imagine we are implementing the host version of our `ui-card` custom element above,
 // which allows a `header` slot. We’ll also have it accept a `subdued` property to
@@ -233,7 +233,7 @@ const Card = createRemoteComponentRenderer(function Card({
 Like with creating a [React wrapper in the remote environment with `createRemoteComponent()`](#event-listener-props), a host using React likely wants to map event listeners to conventional React callback props. Like with creating a React wrapper for the remote environment, let’s return to our `ui-card` example. To refresh, we are imagining a collapsible card element that will emit an `expand` event to the remote environment when its contents are revealed. In the remote environment, our custom element would be defined like this:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteEvents() {
@@ -254,7 +254,7 @@ card.addEventListener('expand', (event) => {
 By default, Remote DOM will map these an event listener to a conventionally-named React prop — that is, `on`, followed by the pascal-case name of the event, like `onExpand`. So, when using the `createRemoteComponentRenderer()` function, you can automatically invoke the event listeners by calling the conventional prop, with the first argument you pass being set as the `detail` of the resulting remote event:
 
 ```tsx
-import {createRemoteComponentRenderer} from '@remote-dom/react/host';
+import {createRemoteComponentRenderer} from '@mittwald/remote-dom-react/host';
 
 const Card = createRemoteComponentRenderer(function Card({children, onExpand}) {
   return (
@@ -270,7 +270,7 @@ const Card = createRemoteComponentRenderer(function Card({children, onExpand}) {
 The default logic also allows you to pass an `Event` object to the React callback. When you do so, the `detail` field of the event will be passed to the remote environment directly. This can be useful when, for example, you have an existing web component being rendered by React that already emits a custom event with the necessary data.
 
 ```tsx
-import {createRemoteComponentRenderer} from '@remote-dom/react/host';
+import {createRemoteComponentRenderer} from '@mittwald/remote-dom-react/host';
 
 const Card = createRemoteComponentRenderer(function Card({children, onExpand}) {
   return (
@@ -305,7 +305,7 @@ If your event bubbles, be careful not to call the callback unless the matching r
 // Remote environment: two elements that can emit the same event, each with
 // an event listener attached:
 
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class Card extends RemoteElement {
   static get remoteEvents() {
@@ -347,7 +347,7 @@ card.append(button);
 // leads to `card.addEventListener()` callback being called twice (once from the bubbling
 // click on `ui-button` in the remote, and once from the bubbling in the host).
 
-import {createRemoteComponentRenderer} from '@remote-dom/react/host';
+import {createRemoteComponentRenderer} from '@mittwald/remote-dom-react/host';
 
 const Card = createRemoteComponentRenderer(function Card({children, onClick}) {
   // This `onclick` will be called, even if the `Button` was the actual target
@@ -365,7 +365,7 @@ const Button = createRemoteComponentRenderer(function Button({
 To avoid this issue, you should manually check that the target of the event is the current element before calling the callback, which will prevent the event from being dispatched on ancestor elements in the remote environment:
 
 ```tsx
-import {createRemoteComponentRenderer} from '@remote-dom/react/host';
+import {createRemoteComponentRenderer} from '@mittwald/remote-dom-react/host';
 
 const Card = createRemoteComponentRenderer(function Card({children, onClick}) {
   // This `onclick` will be called, even if the `Button` was the actual target
@@ -403,7 +403,7 @@ const Button = createRemoteComponentRenderer(function Button({
 If you pass the event object directly to the callback, Remote DOM will automatically apply this protection for you, so you do not need to protect against this case manually:
 
 ```tsx
-import {createRemoteComponentRenderer} from '@remote-dom/react/host';
+import {createRemoteComponentRenderer} from '@mittwald/remote-dom-react/host';
 
 const Card = createRemoteComponentRenderer(function Card({children, onClick}) {
   // Pass the callback directly through as an event listener.
@@ -430,7 +430,7 @@ import {
   createRemoteComponentRenderer,
   RemoteRootRenderer,
   RemoteReceiver,
-} from '@remote-dom/react/host';
+} from '@mittwald/remote-dom-react/host';
 
 // Create wrapper elements to render our actual UI components in response
 // to remote elements. See the `createRemoteComponentRenderer()` section above.
@@ -459,7 +459,7 @@ import {
   RemoteRootRenderer,
   RemoteFragmentRenderer,
   SignalRemoteReceiver,
-} from '@remote-dom/react/host';
+} from '@mittwald/remote-dom-react/host';
 
 // Same setup as above...
 

@@ -48,7 +48,7 @@ import {SignalRemoteReceiver} from '@remote-dom/signals';
 const receiver = new SignalRemoteReceiver();
 
 // In the remote environment:
-import {RemoteMutationObserver} from '@remote-dom/core/elements';
+import {RemoteMutationObserver} from '@mittwald/remote-dom-core/elements';
 
 const observer = new RemoteMutationObserver(receiver.connection);
 ```
@@ -99,7 +99,7 @@ receiver.implement(receiver.root, {
 });
 
 // In the remote environment:
-import {RemoteRootElement} from '@remote-dom/core/elements';
+import {RemoteRootElement} from '@mittwald/remote-dom-core/elements';
 
 customElements.define('remote-root', RemoteRootElement);
 

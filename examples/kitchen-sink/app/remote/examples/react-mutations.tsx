@@ -1,7 +1,7 @@
 /** @jsxRuntime automatic */
 /** @jsxImportSource react */
 
-import { createRemoteComponent } from '@remote-dom/react';
+import { createRemoteComponent } from '@mittwald/remote-dom-react';
 import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 

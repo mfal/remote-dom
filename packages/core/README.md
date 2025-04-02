@@ -1,22 +1,22 @@
-# `@remote-dom/core`
+# `@mittwald/remote-dom-core`
 
 A collection of DOM-based utilities for synchronizing elements between JavaScript environments.
 
 ## Installation
 
 ```sh
-npm install @remote-dom/core --save # npm
-pnpm install @remote-dom/core --save # pnpm
-yarn add @remote-dom/core # yarn
+npm install @mittwald/remote-dom-core --save # npm
+pnpm install @mittwald/remote-dom-core --save # pnpm
+yarn add @mittwald/remote-dom-core # yarn
 ```
 
 ## Usage
 
-### `@remote-dom/core/elements`
+### `@mittwald/remote-dom-core/elements`
 
-The `@remote-dom/core/elements` package provides the classes and utility functions required to define “remote” elements. You’ll use these utilities in the sandboxed JavaScript environment that’s sending elements.
+The `@mittwald/remote-dom-core/elements` package provides the classes and utility functions required to define “remote” elements. You’ll use these utilities in the sandboxed JavaScript environment that’s sending elements.
 
-To import this entry, you must be in an environment with browser globals, including `HTMLElement` and `MutationObserver`. If you want to run your remote environment in a web worker, you can use the minimal DOM polyfill provided by [`@remote-dom/core/polyfill`](#remote-domcorepolyfill)
+To import this entry, you must be in an environment with browser globals, including `HTMLElement` and `MutationObserver`. If you want to run your remote environment in a web worker, you can use the minimal DOM polyfill provided by [`@mittwald/remote-dom-core/polyfill`](#remote-domcorepolyfill)
 
 #### `RemoteElement`
 
@@ -25,7 +25,7 @@ The most important of these utilities is `RemoteElement`, which is a base class 
 To define a remote element, the simplest approach is to subclass `RemoteElement`, and to use the `customElements` global to associate this element with a tag name:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {}
 
@@ -37,7 +37,7 @@ customElements.define('my-element', MyElement);
 You can provide Remote DOM with a list of [attributes](https://developer.mozilla.org/en-US/docs/Glossary/Attribute) that will be synchronized between the remote and host environments. This can be done manually by calling the `updateRemoteAttribute()` method in a custom `RemoteElement` subclass:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get observedAttributes() {
@@ -57,7 +57,7 @@ customElements.define('my-element', MyElement);
 Or, for convenience, by defining a static `remoteAttributes` getter:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteAttributes() {
@@ -82,7 +82,7 @@ You can also provide Remote DOM with a list of [events](https://developer.mozill
 To define remote events, you can use the `remoteEvents` static getter:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteEvents() {
@@ -103,7 +103,7 @@ element.addEventListener('change', () => console.log('Changed!'));
 By default, a `RemoteEvent` object is dispatched to your remote event listeners. This object is a subclass of [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent), and sets any argument sent from the host on the `detail` property. If you’d prefer a custom event object, you can instead use the object form of `remoteEvents` to set an event’s `dispatchEvent` option, which receives the argument from the host environment, and allows you to return a custom event that will be dispatched on the element:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class ChangeEvent extends CustomEvent {
   constructor(value) {
@@ -139,7 +139,7 @@ Remote events do not bubble by default. As an extension of this behavior, the re
 To listen for events in the host regardless of whether the remote element has an event listener, you can use the `bubbles` option when defining your remote event:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteEvents() {
@@ -169,7 +169,7 @@ Remote DOM converts an allowlist of element instance properties into a dedicated
 You can manually set an element’s remote properties by using the `updateRemoteProperty()` method:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   #label;
@@ -197,7 +197,7 @@ element.label = 'Hello, world!';
 Manually updating remote properties can get a little tedious. Additionally, it’s generally expected that properties can also be set as attributes, which makes it easier to construct elements using HTML. Remote DOM lets you create these attribute/ property pairs easily by indicating the name of your properties in the `remoteProperties` static getter:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteProperties() {
@@ -222,7 +222,7 @@ template.innerHTML = '<my-element label="Hello, world!"></my-element>';
 Remote DOM allows you to define more complex remote properties that do not map to simple string attributes. Instead of setting `remoteProperties` to an array of property names, you can instead set it to an object that provides more details on how to coordinate the attribute, property, and remote property values:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteProperties() {
@@ -263,7 +263,7 @@ Each property definition can have the following options:
 > event listeners that will be synchronized with the host environment.
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteProperties() {
@@ -287,7 +287,7 @@ element.onPress = () => console.log('Pressed!');
 The event name is the name of the property with the `on` prefix removed, and converted to kebab-case. For example, `onPressStart` would be mapped to a `press-start` event. Alternatively, you can set the `event` option to a string to explicitly set the event name:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteProperties() {
@@ -311,7 +311,7 @@ When a remote element uses event listeners to define remote properties, those ev
 - `respondWith()`: Sets a value to be returned to the caller of the remote property.
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteProperties() {
@@ -347,7 +347,7 @@ element.addEventListener('save', (event) => {
 Remote DOM also lets you define methods in the host environment that can be called from the remote environment. You can call these methods using the `callRemoteMethod()` function:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   focus() {
@@ -364,7 +364,7 @@ element.focus();
 It’s common that a method in your `RemoteElement` subclass will just call through to a remote method with a matching name, like the `focus()` method above. In those cases, you can instead define a `remoteMethods` static getter to automatically create these methods:
 
 ```ts
-import {RemoteElement} from '@remote-dom/core/elements';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 class MyElement extends RemoteElement {
   static get remoteMethods() {
@@ -383,7 +383,7 @@ element.focus();
 `createRemoteElement` lets you define a remote element class without having to subclass `RemoteElement`. Instead, you’ll just provide the remote `properties`, `attributes`, `events`, and `methods` for your element as options to the function:
 
 ```ts
-import {createRemoteElement} from '@remote-dom/core/elements';
+import {createRemoteElement} from '@mittwald/remote-dom-core/elements';
 
 const MyElement = createRemoteElement({
   attributes: ['label'],
@@ -400,7 +400,7 @@ customElements.define('my-element', MyElement);
 When using TypeScript, you can pass the generic type arguments to `createRemoteElement` to define the property and method types for your element. This ensures that, when you create your element instance, the properties and methods are properly typed:
 
 ```ts
-import {createRemoteElement} from '@remote-dom/core/elements';
+import {createRemoteElement} from '@mittwald/remote-dom-core/elements';
 
 interface MyElementAttributes {
   label?: string;
@@ -437,12 +437,12 @@ customElements.define('my-element', MyElement);
 
 #### `RemoteMutationObserver`
 
-Remote DOM needs some way to detect that changes have happened in a remote element, in order to communicate those changes to the host environment. If you’re polyfilling the DOM with [`@remote-dom/core/polyfill`](#remote-domcorepolyfill), this is handled for you. However, when operating in other environments, like an `iframe` with a native DOM, you’ll need something that can track these changes.
+Remote DOM needs some way to detect that changes have happened in a remote element, in order to communicate those changes to the host environment. If you’re polyfilling the DOM with [`@mittwald/remote-dom-core/polyfill`](#remote-domcorepolyfill), this is handled for you. However, when operating in other environments, like an `iframe` with a native DOM, you’ll need something that can track these changes.
 
-The `RemoteMutationObserver` class builds on the browser’s [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) to detect changes in a remote element, and to communicate those changes in a way that Remote DOM can understand. You create this object from a “remote connection”, which you’ll generally get from the [`@remote-dom/core/receiver`](#remote-domcorereceiver) package. Then, you’ll observe changes in the HTML element that contains your tree of remote elements.
+The `RemoteMutationObserver` class builds on the browser’s [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) to detect changes in a remote element, and to communicate those changes in a way that Remote DOM can understand. You create this object from a “remote connection”, which you’ll generally get from the [`@mittwald/remote-dom-core/receiver`](#remote-domcorereceiver) package. Then, you’ll observe changes in the HTML element that contains your tree of remote elements.
 
 ```ts
-import {RemoteMutationObserver} from '@remote-dom/core/elements';
+import {RemoteMutationObserver} from '@mittwald/remote-dom-core/elements';
 
 const observer = new RemoteMutationObserver(connection);
 
@@ -453,10 +453,10 @@ observer.observe(document.body);
 
 #### `RemoteRootElement`
 
-The `RemoteRootElement` is a custom `HTMLElement` subclass that can be used to define the root of a tree of custom elements that will be synchronized with the host environment. Unlike `RemoteMutationObserver`, `RemoteRootElement` **only** works in an environment polyfilled using `@remote-dom/core/polyfill`. Once created, you should pass a “remote connection” to the `connect()` method, which will start the synchronization process:
+The `RemoteRootElement` is a custom `HTMLElement` subclass that can be used to define the root of a tree of custom elements that will be synchronized with the host environment. Unlike `RemoteMutationObserver`, `RemoteRootElement` **only** works in an environment polyfilled using `@mittwald/remote-dom-core/polyfill`. Once created, you should pass a “remote connection” to the `connect()` method, which will start the synchronization process:
 
 ```ts
-import {RemoteRootElement} from '@remote-dom/core/elements';
+import {RemoteRootElement} from '@mittwald/remote-dom-core/elements';
 
 // Remote DOM does not define this element, so you can give it a
 // name of your choice. We recommend using `remote-root`.
@@ -480,7 +480,7 @@ To improve performance in these cases, you can use the `BatchingRemoteConnection
 import {
   BatchingRemoteConnection,
   RemoteRootElement,
-} from '@remote-dom/core/elements';
+} from '@mittwald/remote-dom-core/elements';
 
 customElements.define('remote-root', RemoteRootElement);
 
@@ -491,15 +491,15 @@ root.connect(new BatchingRemoteConnection(connection));
 
 #### `RemoteFragmentElement`
 
-Some APIs in [`@remote-dom/preact`](../preact) and [`@remote-dom/react`](../react) need to create an HTML element as a generic container. This element is not defined by default, so if you use these features, you must define a matching custom element for this container. Remote DOM calls this element `remote-fragment`, and you can define this element using the `RemoteFragmentElement` constructor:
+Some APIs in [`@remote-dom/preact`](../preact) and [`@mittwald/remote-dom-react`](../react) need to create an HTML element as a generic container. This element is not defined by default, so if you use these features, you must define a matching custom element for this container. Remote DOM calls this element `remote-fragment`, and you can define this element using the `RemoteFragmentElement` constructor:
 
 ```ts
-import {RemoteFragmentElement} from '@remote-dom/core/elements';
+import {RemoteFragmentElement} from '@mittwald/remote-dom-core/elements';
 
 customElements.define('remote-fragment', RemoteFragmentElement);
 ```
 
-### `@remote-dom/core/receivers`
+### `@mittwald/remote-dom-core/receivers`
 
 A “remote receiver” collects updates that happened in a remote environment, and reconstructs them in a way that allows them to be rendered in the host environment.
 
@@ -507,12 +507,12 @@ This library provides two kinds of receiver: [`RemoteReceiver`](#remotereceiver)
 
 #### `RemoteReceiver`
 
-A `RemoteReceiver` stores remote elements into a basic JavaScript representation, and allows subscribing to individual elements in the remote environment. This can be useful for mapping remote elements to components in a JavaScript framework; for example, the [`@remote-dom/react` library](../react#remoterenderer) uses this receiver to map remote elements to React components.
+A `RemoteReceiver` stores remote elements into a basic JavaScript representation, and allows subscribing to individual elements in the remote environment. This can be useful for mapping remote elements to components in a JavaScript framework; for example, the [`@mittwald/remote-dom-react` library](../react#remoterenderer) uses this receiver to map remote elements to React components.
 
 An empty remote receiver can be created using the `RemoteReceiver` constructor:
 
 ```ts
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver();
 ```
@@ -525,7 +525,7 @@ To support functions being passed over `postMessage`, you may need a way to manu
 // JavaScript environments without leaking memory, by manually
 // managing the memory for those functions.
 import {retain, release} from '@quilted/threads';
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver({retain, release});
 ```
@@ -536,12 +536,12 @@ Each `RemoteReceiver` has a `connection` property, which can be passed to a [`Re
 
 ```ts
 // In the host environment:
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver();
 
 // In the remote environment:
-import {RemoteMutationObserver} from '@remote-dom/core/elements';
+import {RemoteMutationObserver} from '@mittwald/remote-dom-core/elements';
 
 const observer = new RemoteMutationObserver(receiver.connection);
 ```
@@ -551,7 +551,7 @@ const observer = new RemoteMutationObserver(receiver.connection);
 Each `RemoteReceiver` also has a `root` property, which defines the object that all remote element representations will be attached to. This object has a `children` property, which will contain child text and element nodes, which may themselves have additional children.
 
 ```ts
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver();
 const root = receiver.root;
@@ -569,7 +569,7 @@ const root = receiver.root;
 The first argument to this function is the remote element you want to subscribe to, and the second is a function that will be called with the updated description of that element on each change:
 
 ```ts
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver();
 
@@ -583,7 +583,7 @@ receiver.subscribe(receiver.root, (root) => {
 You can pass a third options argument to the `subscribe()` method. Currently, only one option is available: `signal`, which lets you pass an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) that will be used to cancel the subscription:
 
 ```ts
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const abort = new AbortController();
 const receiver = new RemoteReceiver();
@@ -612,7 +612,7 @@ For example, in the example below, we implement a `alert()` method on the root e
 
 ```ts
 // In the host environment:
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver();
 
@@ -623,7 +623,7 @@ receiver.implement(receiver.root, {
 });
 
 // In the remote environment:
-import {RemoteRootElement} from '@remote-dom/core/elements';
+import {RemoteRootElement} from '@mittwald/remote-dom-core/elements';
 
 customElements.define('remote-root', RemoteRootElement);
 
@@ -638,7 +638,7 @@ root.callRemoteMethod('alert', 'Hello, world!');
 `RemoteReceiver.get()` fetches the latest state of a remote element that has been received from the remote environment.
 
 ```ts
-import {RemoteReceiver} from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new RemoteReceiver();
 
@@ -652,7 +652,7 @@ receiver.get(receiver.root) === receiver.root; // true
 An empty remote receiver can be created using the `DOMRemoteReceiver` constructor. You’ll then call the `connect()` method with the HTML element that will serve as your “root” element, to which all the synchronized remote elements will be attached:
 
 ```ts
-import {DOMRemoteReceiver} from '@remote-dom/core/receivers';
+import {DOMRemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new DOMRemoteReceiver();
 
@@ -669,7 +669,7 @@ Like with `RemoteReceiver`, you can pass the `retain` and `release` options to t
 // JavaScript environments without leaking memory, by manually
 // managing the memory for those functions.
 import {retain, release} from '@quilted/threads';
-import {DOMRemoteReceiver} from '@remote-dom/core/receivers';
+import {DOMRemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new DOMRemoteReceiver({retain, release});
 ```
@@ -679,7 +679,7 @@ const receiver = new DOMRemoteReceiver({retain, release});
 By default, `DOMRemoteReceiver` will create a new DOM node each time a remote element is attached to a new parent, which is done to release memory related to the remote environment as quickly as possible. However, this can be inefficient if you’re frequently moving elements between different parents, as this “re-parenting” will create separate elements on the host page each time the parent is changed. If this is a case you need to optimize for, you can pass the `cache.maxAge` option to the `DOMRemoteReceiver` constructor, which will re-use an existing host element representing a remote element when the remote element is re-attached within the specified number of milliseconds:
 
 ```ts
-import {DOMRemoteReceiver} from '@remote-dom/core/receivers';
+import {DOMRemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new DOMRemoteReceiver({
   // Preserve host elements for 1 second after they are
@@ -694,12 +694,12 @@ Like `RemoteReceiver`, each `DOMRemoteReceiver` has a `connection` property, whi
 
 ```ts
 // In the host environment:
-import {DOMRemoteReceiver} from '@remote-dom/core/receivers';
+import {DOMRemoteReceiver} from '@mittwald/remote-dom-core/receivers';
 
 const receiver = new DOMRemoteReceiver();
 
 // In the remote environment:
-import {RemoteMutationObserver} from '@remote-dom/core/elements';
+import {RemoteMutationObserver} from '@mittwald/remote-dom-core/elements';
 
 const observer = new RemoteMutationObserver(receiver.connection);
 ```
@@ -708,25 +708,25 @@ const observer = new RemoteMutationObserver(receiver.connection);
 
 Each `DOMRemoteReceiver` has a `root` property. If you’ve called `connect()` on your receiver, this property will be the HTML element that you passed to that method. Otherwise, it will be a [`DocumentFragment`](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment) that stores remote elements before you’ve selected the host element to attach them to.
 
-### `@remote-dom/core/polyfill`
+### `@mittwald/remote-dom-core/polyfill`
 
-The `@remote-dom/core/polyfill` package provides a minimal DOM polyfill that can be used to run remote elements in a web worker, and automatically communicates changes in that DOM to a host environment, if it has been connected by a [`RemoteRootElement`](#remoterootelement). This polyfill builds on top of the small, hook-able DOM polyfill provided by [`@remote-dom/polyfill`](../polyfill/).
+The `@mittwald/remote-dom-core/polyfill` package provides a minimal DOM polyfill that can be used to run remote elements in a web worker, and automatically communicates changes in that DOM to a host environment, if it has been connected by a [`RemoteRootElement`](#remoterootelement). This polyfill builds on top of the small, hook-able DOM polyfill provided by [`@remote-dom/polyfill`](../polyfill/).
 
 To use this polyfill, import it before any other code that might depend on DOM globals:
 
 ```ts
-import '@remote-dom/core/polyfill';
-import {RemoteElement} from '@remote-dom/core/elements';
+import '@mittwald/remote-dom-core/polyfill';
+import {RemoteElement} from '@mittwald/remote-dom-core/elements';
 
 // ...
 ```
 
-### `@remote-dom/core/html`
+### `@mittwald/remote-dom-core/html`
 
-The `@remote-dom/core/html` package provides a helper function for creating DOM elements from tagged template literals. This lets you create large quantities of DOM elements, with intelligent handling of element properties, and supports minimal “components” for packaging up reusable DOM structures.
+The `@mittwald/remote-dom-core/html` package provides a helper function for creating DOM elements from tagged template literals. This lets you create large quantities of DOM elements, with intelligent handling of element properties, and supports minimal “components” for packaging up reusable DOM structures.
 
 ```ts
-import {html} from '@remote-dom/core/html';
+import {html} from '@mittwald/remote-dom-core/html';
 
 function MyButton() {
   return html`<ui-button

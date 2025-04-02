@@ -29,7 +29,7 @@ import {
   type RemoteMutationRecord,
   type RemoteNodeSerialization,
   type RemoteTextSerialization,
-} from '@remote-dom/core';
+} from '@mittwald/remote-dom-core';
 
 export interface LegacyRemoteChannelElementMap {
   [key: string]: string;
@@ -56,7 +56,7 @@ export interface LegacyRemoteChannelOptions {
  *
  * @example
  * ```tsx
- * import {DOMRemoteReceiver} from '@remote-dom/core/receivers';
+ * import {DOMRemoteReceiver} from '@mittwald/remote-dom-core/receivers';
  * import {adaptToLegacyRemoteChannel} from '@remote-dom/compat';
  *
  * const receiver = new DOMRemoteReceiver();

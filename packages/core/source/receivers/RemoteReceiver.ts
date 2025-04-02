@@ -91,7 +91,7 @@ type Writable<T> = {
  * A `RemoteReceiver` stores remote elements into a basic JavaScript representation,
  * and allows subscribing to individual elements in the remote environment.
  * This can be useful for mapping remote elements to components in a JavaScript
- * framework; for example, the [`@remote-dom/react` library](https://github.com/Shopify/remote-dom/blob/main/packages/react#remoterenderer)
+ * framework; for example, the [`@mittwald/remote-dom-react` library](https://github.com/Shopify/remote-dom/blob/main/packages/react#remoterenderer)
  * uses this receiver to map remote elements to React components.
  */
 export class RemoteReceiver {
@@ -359,7 +359,7 @@ export class RemoteReceiver {
    * @returns The current state of the remote node, or `undefined` if the node is not connected to the remote tree.
    *
    * @example
-   * import {RemoteReceiver} from '@remote-dom/core/receivers';
+   * import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
    *
    * const receiver = new RemoteReceiver();
    *
@@ -378,7 +378,7 @@ export class RemoteReceiver {
    *
    * @example
    * // In the host environment:
-   * import {RemoteReceiver} from '@remote-dom/core/receivers';
+   * import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
    *
    * const receiver = new RemoteReceiver();
    *
@@ -389,7 +389,7 @@ export class RemoteReceiver {
    * });
    *
    * // In the remote environment:
-   * import {RemoteRootElement} from '@remote-dom/core/elements';
+   * import {RemoteRootElement} from '@mittwald/remote-dom-core/elements';
    *
    * customElements.define('remote-root', RemoteRootElement);
    *
@@ -419,7 +419,7 @@ export class RemoteReceiver {
    * @param subscriber A function that will be called with the updated node on each change.
    *
    * @example
-   * import {RemoteReceiver} from '@remote-dom/core/receivers';
+   * import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
    *
    * const abort = new AbortController();
    * const receiver = new RemoteReceiver();
