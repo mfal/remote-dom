@@ -5,7 +5,7 @@
   "description": "A collection of DOM-based utilities for synchronizing elements between JavaScript environments",
   "publishConfig": {
     "access": "public",
-    "@remote-dom/registry": "https://registry.npmjs.org"
+    "@mittwald/registry": "https://registry.npmjs.org"
   },
   "version": "1.7.0-mittwald-1",
   "engines": {

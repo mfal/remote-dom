@@ -4,7 +4,7 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public",
-    "@remote-dom/registry": "https://registry.npmjs.org"
+    "@mittwald/registry": "https://registry.npmjs.org"
   },
   "version": "1.2.2-mittwald-1",
   "engines": {
