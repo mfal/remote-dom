@@ -78,7 +78,7 @@ export class RemoteMutationObserver extends MutationObserver {
               MUTATION_TYPE_INSERT_CHILD,
               targetId,
               serializeRemoteNode(node),
-              node.nextSibling ? remoteId(node.nextSibling) : undefined,
+              record.nextSibling ? remoteId(record.nextSibling) : undefined,
             ]);
           });
         } else if (record.type === 'characterData') {
