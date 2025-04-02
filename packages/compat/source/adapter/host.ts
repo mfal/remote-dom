@@ -78,8 +78,18 @@ export function adaptToLegacyRemoteChannel(
 
       switch (mutationType) {
         case MUTATION_TYPE_INSERT_CHILD: {
+          const parentId = record[1];
           const node = record[2];
-          const index = record[3];
+          const nextSiblingId = record[3];
+          if (!tree.has(parentId)) {
+            tree.set(parentId, []);
+          }
+
+          const siblings = tree.get(parentId)!;
+          const index =
+            nextSiblingId === undefined
+              ? siblings.length
+              : siblings.findIndex((child) => child.id === nextSiblingId);
           persistNode(parentId, node, index);
           break;
         }
@@ -116,14 +126,14 @@ export function adaptToLegacyRemoteChannel(
   }
 
   function removeNode(parentId: string, id: string) {
-    const parentNode = tree.get(parentId);
-    if (!parentNode) {
+    const siblings = tree.get(parentId);
+    if (!siblings) {
       return;
     }
-    const index = parentNode?.findIndex(child => child.id === id);  
+    const index = siblings?.findIndex((child) => child.id === id);
     if (index === -1) return;
 
-    parentNode.splice(index, 1);
+    siblings.splice(index, 1);
     cleanupNode(id);
   }
 
@@ -149,12 +159,11 @@ export function adaptToLegacyRemoteChannel(
           payload as LegacyActionArgumentMap[typeof LEGACY_ACTION_MOUNT];
 
         const records = nodes.map(
-          (node, index) =>
+          (node) =>
             [
               MUTATION_TYPE_INSERT_CHILD,
               ROOT_ID,
               adaptLegacyNodeSerialization(node, options),
-              index,
             ] satisfies RemoteMutationRecord,
         );
 
@@ -169,27 +178,27 @@ export function adaptToLegacyRemoteChannel(
 
         const records = [];
 
-        const parentNode = tree.get(parentId);
+        const siblings = tree.get(parentId) ?? [];
 
-        if (parentNode) {
-          const existingChildIndex = parentNode.findIndex(
-            ({id}) => id === child.id,
-          );
+        const existingChildIndex = siblings.findIndex(
+          ({id}) => id === child.id,
+        );
 
-          if (existingChildIndex >= 0) {
-            records.push([
-              MUTATION_TYPE_REMOVE_CHILD,
-              parentId,
-              child.id,
-            ] satisfies RemoteMutationRecord);
-          }
+        if (existingChildIndex >= 0) {
+          records.push([
+            MUTATION_TYPE_REMOVE_CHILD,
+            parentId,
+            child.id,
+          ] satisfies RemoteMutationRecord);
         }
 
         records.push([
           MUTATION_TYPE_INSERT_CHILD,
           parentId,
           adaptLegacyNodeSerialization(child, options),
-          index,
+          existingChildIndex >= 0
+            ? siblings.filter((s) => s.id !== child.id)[index]?.id
+            : siblings[index]?.id,
         ] satisfies RemoteMutationRecord);
 
         mutate(records);
@@ -204,9 +213,7 @@ export function adaptToLegacyRemoteChannel(
         if (id === undefined) {
           return;
         }
-        mutate([
-          [MUTATION_TYPE_REMOVE_CHILD, parentId, id],
-        ]);
+        mutate([[MUTATION_TYPE_REMOVE_CHILD, parentId, id]]);
 
         break;
       }
@@ -243,7 +250,6 @@ export function adaptToLegacyRemoteChannel(
               MUTATION_TYPE_INSERT_CHILD,
               id,
               adaptLegacyPropFragmentSerialization(key, value, options),
-              tree.get(id)?.length ?? 0,
             ] satisfies RemoteMutationRecord);
           } else {
             if (slotNodeId !== undefined) {

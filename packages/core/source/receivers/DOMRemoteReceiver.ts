@@ -1,4 +1,4 @@
-import { createRemoteConnection, type RemoteConnection } from '../connection.ts';
+import {createRemoteConnection, type RemoteConnection} from '../connection.ts';
 import {
   NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
@@ -8,8 +8,8 @@ import {
   UPDATE_PROPERTY_TYPE_EVENT_LISTENER,
   UPDATE_PROPERTY_TYPE_PROPERTY,
 } from '../constants.ts';
-import type { RemoteNodeSerialization } from '../types.ts';
-import type { RemoteReceiverOptions } from './shared.ts';
+import type {RemoteNodeSerialization} from '../types.ts';
+import type {RemoteReceiverOptions} from './shared.ts';
 
 const REMOTE_IDS = new WeakMap<Node, string>();
 const REMOTE_PROPERTIES = new WeakMap<Node, Record<string, any>>();
@@ -105,13 +105,19 @@ export class DOMRemoteReceiver {
           ? call(element as any, method, ...args)
           : (element as any)[method](...args);
       },
-      insertChild: (id, child, index) => {
-        const parent = id === ROOT_ID ? this.root : attached.get(id)!;
+      insertChild: (parentId, child, nextSiblingId) => {
+        const parent =
+          parentId === ROOT_ID ? this.root : attached.get(parentId)!;
+        const normalizedChild = attach(child);
 
-        const existingTimeout = destroyTimeouts.get(id);
+        const existingTimeout = destroyTimeouts.get(parentId);
         if (existingTimeout) clearTimeout(existingTimeout);
 
-        parent.insertBefore(attach(child), parent.childNodes[index] || null);
+        if (nextSiblingId === undefined) {
+          parent.appendChild(normalizedChild);
+        } else {
+          parent.insertBefore(normalizedChild, attached.get(nextSiblingId)!);
+        }
       },
       removeChild: (parentId, id) => {
         const child = attached.get(id) as ChildNode;

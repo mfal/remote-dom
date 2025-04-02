@@ -9,7 +9,7 @@ import type { RenderAPI } from '../../types.ts';
 import {
   Button as ButtonElement,
   Stack as StackElement,
-  Text as TextElement
+  Text as TextElement,
 } from '../elements.ts';
 
 export const useTimer = (ms: number) => {
@@ -26,7 +26,6 @@ export const useTimer = (ms: number) => {
   return ellapsed;
 };
 
-
 const Stack = createRemoteComponent('ui-stack', StackElement);
 const Text = createRemoteComponent('ui-text', TextElement);
 const Button = createRemoteComponent('ui-button', ButtonElement, {
@@ -35,8 +34,7 @@ const Button = createRemoteComponent('ui-button', ButtonElement, {
   },
 });
 
-
-const TimerComponent: FC<PropsWithChildren> = ({ children }) => {
+const TimerComponent: FC<PropsWithChildren> = ({children}) => {
   const ellapsed = useTimer(100);
   if (ellapsed) {
     return <Button>Button {children}</Button>;
@@ -49,9 +47,6 @@ function App(_props: {api: RenderAPI}) {
     <Stack spacing>
       <TimerComponent>1</TimerComponent>
       <TimerComponent>2</TimerComponent>
-      <TimerComponent>3</TimerComponent>
-      <TimerComponent>4</TimerComponent>
-      <TimerComponent>5</TimerComponent>
     </Stack>
   );
 }

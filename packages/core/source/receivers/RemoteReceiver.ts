@@ -1,4 +1,4 @@
-import { createRemoteConnection, type RemoteConnection } from '../connection.ts';
+import {createRemoteConnection, type RemoteConnection} from '../connection.ts';
 import {
   NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
@@ -15,7 +15,7 @@ import type {
   RemoteNodeSerialization,
   RemoteTextSerialization,
 } from '../types.ts';
-import type { RemoteReceiverOptions } from './shared.ts';
+import type {RemoteReceiverOptions} from './shared.ts';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -162,21 +162,16 @@ export class RemoteReceiver {
 
         return implementationMethod(...args);
       },
-      insertChild: (id, child, index) => {
-        const parent = attached.get(id) as Writable<RemoteReceiverParent>;
-
-        const {children} = parent;
-
+      insertChild: (parentId, child, nextSiblingId) => {
+        const parent = attached.get(parentId) as Writable<RemoteReceiverParent>;
+        const children = parent.children as Writable<RemoteReceiverNode[]>;
         const normalizedChild = attach(child, parent);
 
-        if (index === children.length) {
-          (children as Writable<typeof children>).push(normalizedChild);
+        if (nextSiblingId === undefined) {
+          children.push(normalizedChild);
         } else {
-          (children as Writable<typeof children>).splice(
-            index,
-            0,
-            normalizedChild,
-          );
+          const sibling = attached.get(nextSiblingId) as RemoteReceiverNode;
+          children.splice(children.indexOf(sibling), 0, normalizedChild);
         }
 
         parent.version += 1;
@@ -191,10 +186,7 @@ export class RemoteReceiver {
         const node = attached.get(id) as Writable<RemoteReceiverNode>;
         const index = parent.children.indexOf(node);
 
-        const [removed] = children.splice(
-          index,
-          1,
-        );
+        const [removed] = children.splice(index, 1);
 
         if (!removed) {
           return;

@@ -1,4 +1,4 @@
-import { HOOKS, Window, type Hooks } from '@remote-dom/polyfill';
+import {HOOKS, Window, type Hooks} from '@remote-dom/polyfill';
 
 import {
   MUTATION_TYPE_INSERT_CHILD,
@@ -19,7 +19,7 @@ const hooks = window[HOOKS];
 
 Window.setGlobal(window);
 
-hooks.insertChild = (parent, node, index) => {
+hooks.insertChild = (parent, node) => {
   const connection = remoteConnection(parent);
   if (connection == null) return;
 
@@ -30,7 +30,7 @@ hooks.insertChild = (parent, node, index) => {
       MUTATION_TYPE_INSERT_CHILD,
       remoteId(parent),
       serializeRemoteNode(node),
-      index,
+      node.nextSibling ? remoteId(node.nextSibling) : undefined,
     ],
   ]);
 };
@@ -41,7 +41,9 @@ hooks.removeChild = (parent, node) => {
 
   disconnectRemoteNode(node);
 
-  connection.mutate([[MUTATION_TYPE_REMOVE_CHILD, remoteId(parent), remoteId(node)]]);
+  connection.mutate([
+    [MUTATION_TYPE_REMOVE_CHILD, remoteId(parent), remoteId(node)],
+  ]);
 };
 
 hooks.setText = (text, data) => {
@@ -72,5 +74,4 @@ hooks.removeAttribute = (element, name) => {
   updateRemoteElementAttribute(element, name);
 };
 
-export { hooks, window, Window, type Hooks };
-
+export {hooks, window, Window, type Hooks};

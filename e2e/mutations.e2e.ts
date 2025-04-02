@@ -1,8 +1,6 @@
-import { expect, test } from '@playwright/test';
+import {expect, test} from '@playwright/test';
 
-[
-  ['iframe', 'react-mutations'],
-].forEach(([sandbox, example]) => {
+[['iframe', 'react-mutations']].forEach(([sandbox, example]) => {
   test(`mutations are applied correctly with ${sandbox} sandbox and ${example} example`, async ({
     page,
   }) => {

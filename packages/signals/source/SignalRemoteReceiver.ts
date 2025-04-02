@@ -21,7 +21,7 @@ import {
   type RemoteNodeSerialization,
   type RemoteTextSerialization,
 } from '@remote-dom/core';
-import type { RemoteReceiverOptions } from '@remote-dom/core/receivers';
+import type {RemoteReceiverOptions} from '@remote-dom/core/receivers';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -158,16 +158,23 @@ export class SignalRemoteReceiver {
 
         return implementationMethod(...args);
       },
-      insertChild: (id, child, index) => {
-        const parent = attached.get(id) as SignalRemoteReceiverParent;
+      insertChild: (parentId, child, nextSiblingId) => {
+        const parent = attached.get(parentId) as SignalRemoteReceiverParent;
         const newChildren = [...parent.children.peek()];
 
         const normalizedChild = attach(child, parent);
 
-        if (index === newChildren.length) {
+        if (nextSiblingId === undefined) {
           newChildren.push(normalizedChild);
         } else {
-          newChildren.splice(index, 0, normalizedChild);
+          const nextSibling = attached.get(
+            nextSiblingId,
+          ) as SignalRemoteReceiverNode;
+          newChildren.splice(
+            newChildren.indexOf(nextSibling),
+            0,
+            normalizedChild,
+          );
         }
 
         (parent.children as any).value = newChildren;

@@ -1,8 +1,8 @@
 import '@remote-dom/core/polyfill';
 
-import { describe, expect, it, vi, type Mocked } from 'vitest';
+import {describe, expect, it, vi, type Mocked} from 'vitest';
 
-import { adaptToLegacyRemoteChannel } from '../adapter/host.ts';
+import {adaptToLegacyRemoteChannel} from '../adapter/host.ts';
 
 import {
   ACTION_INSERT_CHILD,
@@ -26,7 +26,7 @@ import {
   ROOT_ID,
 } from '@remote-dom/core';
 
-import { RemoteReceiver } from '@remote-dom/core/receivers';
+import {RemoteReceiver} from '@remote-dom/core/receivers';
 
 describe('adaptToLegacyRemoteChannel()', () => {
   describe('ACTION_MOUNT', () => {
@@ -52,7 +52,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
             type: NODE_TYPE_TEXT,
             data: 'I am a text',
           },
-          0,
         ],
       ]);
 
@@ -98,7 +97,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
-          0,
         ],
       ]);
 
@@ -151,7 +149,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
             type: NODE_TYPE_COMMENT,
             data: 'added by remote-ui legacy adaptor to replace a fragment rendered as a child',
           },
-          0,
         ],
       ]);
 
@@ -226,7 +223,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
-          0,
         ],
       ]);
 
@@ -314,7 +310,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
-          0,
         ],
       ]);
 
@@ -449,7 +444,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
             ],
             properties: {},
           },
-          0,
         ],
       ]);
 
@@ -559,7 +553,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             properties: {},
             children: [{id: '2', type: NODE_TYPE_TEXT, data: 'I am a button'}],
           },
-          1,
+          undefined,
         ],
       ]);
 
@@ -650,7 +644,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             properties: {},
             children: [],
           },
-          1,
+          undefined,
         ],
       ]);
 
@@ -755,7 +749,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             ],
             properties: {},
           },
-          1,
+          undefined,
         ],
       ]);
 
@@ -1034,7 +1028,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
-          0,
         ],
       ]);
 
@@ -1102,7 +1095,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
             properties: {},
             children: [],
           },
-          0,
         ],
       ]);
     });
@@ -1167,7 +1159,6 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
-          0,
         ],
       ]);
 
@@ -1342,7 +1333,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             type: NODE_TYPE_TEXT,
             data: 'I am the third child',
           },
-          1,
+          '0',
         ],
       ]);
 
