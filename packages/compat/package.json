@@ -29,7 +29,7 @@
     "build": "rollup --config ./rollup.config.js"
   },
   "dependencies": {
-    "@mittwald/remote-dom-core": "workspace:^1.7.0",
+    "@mittwald/remote-dom-core": "workspace:*",
     "@remote-ui/core": "^2.0.0"
   },
   "browserslist": [

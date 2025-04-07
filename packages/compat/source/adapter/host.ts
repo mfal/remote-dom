@@ -87,6 +87,11 @@ export function adaptToLegacyRemoteChannel(
           }
 
           const siblings = tree.get(parentId)!;
+
+          if (siblings.some((existing) => existing.id === node.id)) {
+            return;
+          }
+
           const index =
             nextSiblingId === undefined
               ? siblings.length
@@ -165,6 +170,7 @@ export function adaptToLegacyRemoteChannel(
               MUTATION_TYPE_INSERT_CHILD,
               ROOT_ID,
               adaptLegacyNodeSerialization(node, options),
+              undefined,
             ] satisfies RemoteMutationRecord,
         );
 
@@ -254,6 +260,7 @@ export function adaptToLegacyRemoteChannel(
               MUTATION_TYPE_INSERT_CHILD,
               id,
               adaptLegacyPropFragmentSerialization(key, value, options),
+              undefined,
             ] satisfies RemoteMutationRecord);
           } else {
             if (slotNodeId !== undefined) {

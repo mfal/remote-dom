@@ -1,8 +1,8 @@
 import '@mittwald/remote-dom-core/polyfill';
 
-import {describe, expect, it, vi, type Mocked} from 'vitest';
+import { describe, expect, it, vi, type Mocked } from 'vitest';
 
-import {adaptToLegacyRemoteChannel} from '../adapter/host.ts';
+import { adaptToLegacyRemoteChannel } from '../adapter/host.ts';
 
 import {
   ACTION_INSERT_CHILD,
@@ -26,7 +26,7 @@ import {
   ROOT_ID,
 } from '@mittwald/remote-dom-core';
 
-import {RemoteReceiver} from '@mittwald/remote-dom-core/receivers';
+import { RemoteReceiver } from '@mittwald/remote-dom-core/receivers';
 
 describe('adaptToLegacyRemoteChannel()', () => {
   describe('ACTION_MOUNT', () => {
@@ -52,6 +52,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             type: NODE_TYPE_TEXT,
             data: 'I am a text',
           },
+          undefined,
         ],
       ]);
 
@@ -97,6 +98,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
+          undefined,
         ],
       ]);
 
@@ -149,6 +151,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             type: NODE_TYPE_COMMENT,
             data: 'added by remote-ui legacy adaptor to replace a fragment rendered as a child',
           },
+          undefined,
         ],
       ]);
 
@@ -223,6 +226,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
+          undefined,
         ],
       ]);
 
@@ -310,6 +314,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
+          undefined,
         ],
       ]);
 
@@ -444,6 +449,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             ],
             properties: {},
           },
+          undefined,
         ],
       ]);
 
@@ -1028,6 +1034,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
+          undefined,
         ],
       ]);
 
@@ -1095,6 +1102,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
             properties: {},
             children: [],
           },
+          undefined,
         ],
       ]);
     });
@@ -1159,6 +1167,7 @@ describe('adaptToLegacyRemoteChannel()', () => {
               },
             ],
           },
+          undefined,
         ],
       ]);
 

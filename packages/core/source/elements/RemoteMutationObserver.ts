@@ -3,7 +3,6 @@ import {
   MUTATION_TYPE_REMOVE_CHILD,
   MUTATION_TYPE_UPDATE_PROPERTY,
   MUTATION_TYPE_UPDATE_TEXT,
-  NODE_TYPE_COMMENT,
   ROOT_ID,
 } from '../constants.ts';
 import type { RemoteConnection, RemoteMutationRecord } from '../types.ts';
@@ -35,7 +34,6 @@ import {
 export class RemoteMutationObserver extends MutationObserver {
   constructor(private readonly connection: RemoteConnection) {
     super((records) => {
-      const addedNodes: Node[] = [];
       const remoteRecords: RemoteMutationRecord[] = [];
 
       for (const record of records) {
@@ -50,28 +48,9 @@ export class RemoteMutationObserver extends MutationObserver {
               targetId,
               remoteId(node),
             ]);
-
-            console.log("remove", node.textContent, record.previousSibling?.textContent, record.nextSibling?.textContent);
-
-            addedNodes.splice(addedNodes.indexOf(node), 1);
           });
 
-          // A mutation observer will queue some changes, so we might get one record
-          // for attaching a parent element, and additional records for attaching descendants.
-          // We serialize the entire tree when a new node was added, so we don’t want to
-          // send additional “insert child” records when we see those descendants — they
-          // will already be included the insertion of the parent.
           record.addedNodes.forEach((node) => {
-            console.log("add", node.textContent, record.previousSibling?.textContent, record.nextSibling?.textContent);
-            if (node.nodeType === NODE_TYPE_COMMENT) {
-              return;
-            }
-
-            if (addedNodes.some((addedNode) => addedNode.contains(node))) {
-              return;
-            }
-
-            addedNodes.push(node);
             connectRemoteNode(node, connection);
 
             remoteRecords.push([
@@ -136,6 +115,7 @@ export class RemoteMutationObserver extends MutationObserver {
           MUTATION_TYPE_INSERT_CHILD,
           ROOT_ID,
           serializeRemoteNode(node),
+          undefined,
         ]);
       }
 

@@ -139,7 +139,7 @@ importers:
   packages/compat:
     dependencies:
       '@mittwald/remote-dom-core':
-        specifier: workspace:^1.7.0
+        specifier: workspace:*
         version: link:../core
       '@remote-ui/core':
         specifier: ^2.0.0
@@ -148,8 +148,8 @@ importers:
   packages/core:
     dependencies:
       '@remote-dom/polyfill':
-        specifier: ^1.4.2
-        version: 1.4.3
+        specifier: workspace:*
+        version: link:../polyfill
       htm:
         specifier: ^3.1.1
         version: 3.1.1
@@ -166,10 +166,10 @@ importers:
   packages/preact:
     dependencies:
       '@mittwald/remote-dom-core':
-        specifier: workspace:^1.7.0
+        specifier: workspace:*
         version: link:../core
       '@remote-dom/signals':
-        specifier: workspace:^2.1.0
+        specifier: workspace:*
         version: link:../signals
       htm:
         specifier: ^3.1.1
@@ -216,7 +216,7 @@ importers:
   packages/signals:
     dependencies:
       '@mittwald/remote-dom-core':
-        specifier: workspace:^1.7.0
+        specifier: workspace:*
         version: link:../core
     devDependencies:
       '@preact/signals-core':
@@ -1435,10 +1435,6 @@ packages:
         optional: true
       vitest:
         optional: true
-
-  '@remote-dom/polyfill@1.4.3':
-    resolution: {integrity: sha512-OxgDf8E+xEixw74L8wXJai2uopmHVCqGfl9I/a3nVwSNijUEXQmuHuTLtKHP+tHBjhHYvzS55vzJvJ8Uyul0Hg==}
-    engines: {node: '>=14.0.0'}
 
   '@remote-ui/async-subscription@2.1.15':
     resolution: {integrity: sha512-SdPfO4ExDOVyOPAoCqT9+Tk0UeU97EMplkxlr5qiv3W7c1yRsxgtbETicoBh9l/P49bLzVjiJG6CQIu1au3Vhw==}
@@ -4837,8 +4833,6 @@ snapshots:
       - preact
       - rollup
       - supports-color
-
-  '@remote-dom/polyfill@1.4.3': {}
 
   '@remote-ui/async-subscription@2.1.15':
     dependencies:

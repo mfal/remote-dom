@@ -1,4 +1,4 @@
-import {createRemoteConnection, type RemoteConnection} from '../connection.ts';
+import { createRemoteConnection, type RemoteConnection } from '../connection.ts';
 import {
   NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
@@ -15,7 +15,7 @@ import type {
   RemoteNodeSerialization,
   RemoteTextSerialization,
 } from '../types.ts';
-import type {RemoteReceiverOptions} from './shared.ts';
+import type { RemoteReceiverOptions } from './shared.ts';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -91,7 +91,7 @@ type Writable<T> = {
  * A `RemoteReceiver` stores remote elements into a basic JavaScript representation,
  * and allows subscribing to individual elements in the remote environment.
  * This can be useful for mapping remote elements to components in a JavaScript
- * framework; for example, the [`@mittwald/remote-dom-react` library](https://github.com/Shopify/remote-dom/blob/main/packages/react#remoterenderer)
+ * framework; for example, the [`@remote-dom/react` library](https://github.com/Shopify/remote-dom/blob/main/packages/react#remoterenderer)
  * uses this receiver to map remote elements to React components.
  */
 export class RemoteReceiver {
@@ -165,6 +165,11 @@ export class RemoteReceiver {
       insertChild: (parentId, child, nextSiblingId) => {
         const parent = attached.get(parentId) as Writable<RemoteReceiverParent>;
         const children = parent.children as Writable<RemoteReceiverNode[]>;
+
+        if (children.some((existing) => existing.id === child.id)) {
+          return;
+        }
+
         const normalizedChild = attach(child, parent);
 
         if (nextSiblingId === undefined) {

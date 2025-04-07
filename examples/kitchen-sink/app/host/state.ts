@@ -1,4 +1,4 @@
-import {signal, effect} from '@preact/signals';
+import {effect, signal} from '@preact/signals';
 import {SignalRemoteReceiver} from '@remote-dom/preact/host';
 
 import type {RenderExample, RenderSandbox} from '../types.ts';
@@ -15,6 +15,9 @@ const ALLOWED_EXAMPLE_VALUES = new Set<RenderExample>([
   'react-mutations',
   'svelte',
   'vue',
+  'react-mutations-1',
+  'react-mutations-2',
+  'react-mutations-3',
 ]);
 
 export function createState(

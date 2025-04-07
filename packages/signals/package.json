@@ -43,6 +43,6 @@
     "defaults and not dead"
   ],
   "dependencies": {
-    "@mittwald/remote-dom-core": "workspace:^1.7.0"
+    "@mittwald/remote-dom-core": "workspace:*"
   }
 }
