@@ -6,7 +6,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "version": "1.2.2-mittwald.3",
+  "version": "1.2.2-mittwald.4",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -15,7 +15,10 @@
     "url": "https://github.com/Shopify/remote-dom",
     "directory": "packages/react"
   },
-  "files": ["build", "source"],
+  "files": [
+    "build",
+    "source"
+  ],
   "exports": {
     ".": {
       "types": "./build/typescript/index.d.ts",
