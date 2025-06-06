@@ -11,6 +11,7 @@ import {
   disconnectRemoteNode,
   REMOTE_IDS,
   remoteId,
+  remoteNodeExists,
   serializeRemoteNode,
 } from './internals.ts';
 
@@ -37,17 +38,14 @@ export class RemoteMutationObserver extends MutationObserver {
       const remoteRecords: RemoteMutationRecord[] = [];
 
       for (const record of records) {
+        if (!remoteNodeExists(record.target)) {
+          return;
+        }
         const targetId = remoteId(record.target);
 
         if (record.type === 'childList') {
           record.removedNodes.forEach((node) => {
-            if (!REMOTE_IDS.has(node)) {
-              /**
-               * This happens if the node was not recognized during the
-               * `serializeRemoteNode` of a (probably direct and extensive)
-               * previous mutation-record, when it was no longer in the DOM
-               * at that time of processing.
-               */
+            if (!remoteNodeExists(node)) {
               return;
             }
 

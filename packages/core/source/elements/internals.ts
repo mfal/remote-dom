@@ -33,6 +33,19 @@ export function remoteId(node: Node) {
   return remoteID;
 }
 
+/**
+ * Checks if a node has a remote ID assigned to it.
+ *
+ * There are siutations where a node may not have a remote ID.
+ * This happens if the node was not recognized during the
+ * `serializeRemoteNode` of a (probably direct and extensive)
+ * previous mutation-record, when it was no longer in the DOM
+ * at that time of processing.
+ */
+export function remoteNodeExists(node: Node) {
+  return REMOTE_IDS.has(node);
+}
+
 export const REMOTE_PROPERTIES = new WeakMap<Node, Record<string, any>>();
 
 /**
