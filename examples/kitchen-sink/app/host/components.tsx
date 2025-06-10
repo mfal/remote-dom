@@ -165,6 +165,7 @@ export function ControlPanel({
           <option value="react-mutations-1">React Mutations 1</option>
           <option value="react-mutations-2">React Mutations 2</option>
           <option value="react-mutations-3">React Mutations 3</option>
+          <option value="react-mutations-4">React Mutations 4</option>
         </Select>
       </section>
 

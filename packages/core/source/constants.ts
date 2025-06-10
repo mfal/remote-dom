@@ -5,6 +5,7 @@ export const NODE_TYPE_ROOT = 9;
 
 export const MUTATION_TYPE_INSERT_CHILD = 0;
 export const MUTATION_TYPE_REMOVE_CHILD = 1;
+export const MUTATION_TYPE_MOVE_CHILD = 4;
 export const MUTATION_TYPE_UPDATE_TEXT = 2;
 export const MUTATION_TYPE_UPDATE_PROPERTY = 3;
 

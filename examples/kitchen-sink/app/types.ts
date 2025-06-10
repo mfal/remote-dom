@@ -31,7 +31,8 @@ export type RenderExample =
   | 'react-remote-ui'
   | 'react-mutations-1'
   | 'react-mutations-2'
-  | 'react-mutations-3';
+  | 'react-mutations-3'
+  | 'react-mutations-4';
 
 /**
  * The object that the “host” page will pass to the “remote” environment. This

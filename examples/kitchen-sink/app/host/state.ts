@@ -18,6 +18,7 @@ const ALLOWED_EXAMPLE_VALUES = new Set<RenderExample>([
   'react-mutations-1',
   'react-mutations-2',
   'react-mutations-3',
+  'react-mutations-4',
 ]);
 
 export function createState(

@@ -1,5 +1,6 @@
 import type {
   MUTATION_TYPE_INSERT_CHILD,
+  MUTATION_TYPE_MOVE_CHILD,
   MUTATION_TYPE_REMOVE_CHILD,
   MUTATION_TYPE_UPDATE_PROPERTY,
   MUTATION_TYPE_UPDATE_TEXT,
@@ -31,7 +32,7 @@ export type RemoteMutationRecordInsertChild = [
     | RemoteElementSerialization,
 
   /**
-   * The index in the parents’ children to insert the new child.
+   * The ID of the next sibling in the target parent’s children.
    */
   nextSiblingId: string | undefined,
 ];
@@ -51,6 +52,33 @@ export type RemoteMutationRecordRemoveChild = [
    * The ID of the child to remove.
    */
   id: string,
+];
+
+/**
+ * Describes a remote node being moved.
+ */
+export type RemoteMutationRecordMoveChild = [
+  type: typeof MUTATION_TYPE_MOVE_CHILD,
+
+  /**
+   * The ID of the source parent node.
+   */
+  fromParentId: string,
+
+  /**
+   * The ID of the target parent node.
+   */
+  toParentId: string,
+
+  /**
+   * The ID of the child to be moved.
+   */
+  id: string,
+
+  /**
+   * The ID of the next sibling in the target parent’s children.
+   */
+  nextSiblingId: string | undefined,
 ];
 
 /**
@@ -108,6 +136,7 @@ export type RemoteMutationRecordUpdateProperty = [
 export type RemoteMutationRecord =
   | RemoteMutationRecordInsertChild
   | RemoteMutationRecordRemoveChild
+  | RemoteMutationRecordMoveChild
   | RemoteMutationRecordUpdateText
   | RemoteMutationRecordUpdateProperty;
 

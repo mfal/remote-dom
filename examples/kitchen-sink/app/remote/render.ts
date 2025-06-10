@@ -24,7 +24,8 @@ export async function render(root: Element, api: RenderAPI) {
     }
     case 'react-mutations-1':
     case 'react-mutations-2':
-    case 'react-mutations-3': {
+    case 'react-mutations-3':
+    case 'react-mutations-4': {
       const {renderUsingReact} = await import('./examples/react-mutations.tsx');
       return renderUsingReact(root, api);
     }

@@ -1,5 +1,5 @@
-import { MUTATION_TYPE_INSERT_CHILD, ROOT_ID } from '../constants.ts';
-import type { RemoteConnection, RemoteMutationRecord } from '../types.ts';
+import {MUTATION_TYPE_INSERT_CHILD, ROOT_ID} from '../constants.ts';
+import type {RemoteConnection, RemoteMutationRecord} from '../types.ts';
 
 import {
   callRemoteElementMethod,

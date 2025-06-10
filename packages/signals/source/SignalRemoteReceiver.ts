@@ -21,7 +21,7 @@ import {
   type RemoteNodeSerialization,
   type RemoteTextSerialization,
 } from '@mittwald/remote-dom-core';
-import type { RemoteReceiverOptions } from '@mittwald/remote-dom-core/receivers';
+import type {RemoteReceiverOptions} from '@mittwald/remote-dom-core/receivers';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -160,41 +160,23 @@ export class SignalRemoteReceiver {
       },
       insertChild: (parentId, child, nextSiblingId) => {
         const parent = attached.get(parentId) as SignalRemoteReceiverParent;
-        const children = [...parent.children.peek()];
-
-        if (children.some((existing) => existing.id === child.id)) {
-          return;
-        }
-
         const normalizedChild = attach(child, parent);
-
-        if (nextSiblingId === undefined) {
-          children.push(normalizedChild);
-        } else {
-          const nextSibling = attached.get(
-            nextSiblingId,
-          ) as SignalRemoteReceiverNode;
-          children.splice(children.indexOf(nextSibling), 0, normalizedChild);
-        }
-
-        (parent.children as any).value = children;
+        insertChild(parent, normalizedChild, nextSiblingId);
       },
       removeChild: (parentId, id) => {
         const parent = attached.get(parentId) as SignalRemoteReceiverParent;
-        const newChildren = [...parent.children.peek()];
-
         const node = attached.get(id) as SignalRemoteReceiverNode;
-        const index = newChildren.indexOf(node);
-
-        const [removed] = newChildren.splice(index, 1);
-
-        if (!removed) {
-          return;
-        }
-
-        (parent.children as any).value = newChildren;
-
-        detach(removed);
+        removeChild(parent, node);
+        detach(node);
+      },
+      moveChild: (fromParentId, toParentId, id, nextSiblingId) => {
+        const fromParent = attached.get(
+          fromParentId,
+        ) as SignalRemoteReceiverParent;
+        const toParent = attached.get(toParentId) as SignalRemoteReceiverParent;
+        const node = attached.get(id) as SignalRemoteReceiverNode;
+        removeChild(fromParent, node);
+        insertChild(toParent, node, nextSiblingId);
       },
       updateProperty: (
         id,
@@ -251,15 +233,6 @@ export class SignalRemoteReceiver {
         (text.data as any).value = newText;
       },
     });
-
-    this.connection = {
-      call: baseConnection.call,
-      mutate(records) {
-        batch(() => {
-          baseConnection.mutate(records);
-        });
-      },
-    };
 
     function attach(
       child: RemoteNodeSerialization,
@@ -338,6 +311,49 @@ export class SignalRemoteReceiver {
         }
       }
     }
+
+    function insertChild(
+      parent: SignalRemoteReceiverParent,
+      child: SignalRemoteReceiverNode,
+      nextSiblingId?: string,
+    ) {
+      const nextSibling = nextSiblingId
+        ? (attached.get(nextSiblingId) as SignalRemoteReceiverNode)
+        : undefined;
+
+      const children = [...parent.children.peek()];
+
+      if (children.some((existing) => existing.id === child.id)) {
+        return;
+      }
+
+      if (nextSibling === undefined) {
+        children.push(child);
+      } else {
+        children.splice(children.indexOf(nextSibling), 0, child);
+      }
+
+      (parent.children as any).value = children;
+    }
+
+    function removeChild(
+      parent: SignalRemoteReceiverParent,
+      child: SignalRemoteReceiverNode,
+    ) {
+      const newChildren = [...parent.children.peek()];
+      const index = newChildren.indexOf(child);
+      newChildren.splice(index, 1);
+      (parent.children as any).value = newChildren;
+    }
+
+    this.connection = {
+      call: baseConnection.call,
+      mutate(records) {
+        batch(() => {
+          baseConnection.mutate(records);
+        });
+      },
+    };
   }
 
   /**

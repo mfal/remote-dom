@@ -1,4 +1,4 @@
-import { createRemoteConnection, type RemoteConnection } from '../connection.ts';
+import {createRemoteConnection, type RemoteConnection} from '../connection.ts';
 import {
   NODE_TYPE_COMMENT,
   NODE_TYPE_ELEMENT,
@@ -15,7 +15,7 @@ import type {
   RemoteNodeSerialization,
   RemoteTextSerialization,
 } from '../types.ts';
-import type { RemoteReceiverOptions } from './shared.ts';
+import type {RemoteReceiverOptions} from './shared.ts';
 
 /**
  * Represents a text node of a remote tree in a plain JavaScript format, with
@@ -164,44 +164,36 @@ export class RemoteReceiver {
       },
       insertChild: (parentId, child, nextSiblingId) => {
         const parent = attached.get(parentId) as Writable<RemoteReceiverParent>;
-        const children = parent.children as Writable<RemoteReceiverNode[]>;
-
-        if (children.some((existing) => existing.id === child.id)) {
-          return;
-        }
-
-        const normalizedChild = attach(child, parent);
-
-        if (nextSiblingId === undefined) {
-          children.push(normalizedChild);
-        } else {
-          const sibling = attached.get(nextSiblingId) as RemoteReceiverNode;
-          children.splice(children.indexOf(sibling), 0, normalizedChild);
-        }
-
-        parent.version += 1;
+        const node = attach(child, parent);
+        insertChild(parent, node, nextSiblingId);
         this.parents.set(child.id, parent.id);
-
         runSubscribers(parent);
       },
       removeChild: (parentId, id) => {
         const parent = attached.get(parentId) as Writable<RemoteReceiverParent>;
-        const children = parent.children as Writable<RemoteReceiverNode[]>;
-
-        const node = attached.get(id) as Writable<RemoteReceiverNode>;
-        const index = parent.children.indexOf(node);
-
-        const [removed] = children.splice(index, 1);
-
-        if (!removed) {
-          return;
-        }
-
-        parent.version += 1;
-
+        const node = attached.get(id) as RemoteReceiverNode;
+        removeChild(parent, node);
+        this.parents.delete(node.id);
+        detach(node);
         runSubscribers(parent);
+      },
+      moveChild: (fromParentId, toParentId, id, nextSiblingId) => {
+        const fromParent = attached.get(
+          fromParentId,
+        ) as Writable<RemoteReceiverParent>;
+        const toParent = attached.get(
+          toParentId,
+        ) as Writable<RemoteReceiverParent>;
+        const node = attached.get(id) as RemoteReceiverNode;
 
-        detach(removed);
+        removeChild(fromParent, node);
+        insertChild(toParent, node, nextSiblingId);
+
+        this.parents.set(node.id, toParent.id);
+        runSubscribers(fromParent);
+        if (fromParent !== toParent) {
+          runSubscribers(toParent);
+        }
       },
       updateProperty: (
         id,
@@ -353,6 +345,35 @@ export class RemoteReceiver {
           detach(grandChild);
         }
       }
+    }
+
+    function insertChild(
+      parent: Writable<RemoteReceiverParent>,
+      child: RemoteReceiverNode,
+      nextSiblingId?: string,
+    ) {
+      const children = parent.children as Writable<RemoteReceiverNode[]>;
+      const nextSibling = nextSiblingId
+        ? (attached.get(nextSiblingId) as RemoteReceiverNode)
+        : undefined;
+
+      if (nextSibling) {
+        children.splice(children.indexOf(nextSibling), 0, child);
+      } else {
+        children.push(child);
+      }
+
+      parent.version += 1;
+    }
+
+    function removeChild(
+      parent: Writable<RemoteReceiverParent>,
+      node: RemoteReceiverNode,
+    ) {
+      const children = parent.children as Writable<RemoteReceiverNode[]>;
+      const index = children.indexOf(node);
+      children.splice(index, 1);
+      parent.version += 1;
     }
   }
 

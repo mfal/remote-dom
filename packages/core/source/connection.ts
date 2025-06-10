@@ -1,6 +1,7 @@
 import {
   MUTATION_TYPE_INSERT_CHILD,
   MUTATION_TYPE_REMOVE_CHILD,
+  MUTATION_TYPE_MOVE_CHILD,
   MUTATION_TYPE_UPDATE_TEXT,
   MUTATION_TYPE_UPDATE_PROPERTY,
 } from './constants.ts';
@@ -8,6 +9,7 @@ import type {
   RemoteConnection,
   RemoteMutationRecordInsertChild,
   RemoteMutationRecordRemoveChild,
+  RemoteMutationRecordMoveChild,
   RemoteMutationRecordUpdateText,
   RemoteMutationRecordUpdateProperty,
 } from './types.ts';
@@ -26,15 +28,25 @@ export interface RemoteConnectionHandler {
   insertChild(
     id: RemoteMutationRecordInsertChild[1],
     child: RemoteMutationRecordInsertChild[2],
-    index: RemoteMutationRecordInsertChild[3],
+    nextSiblingId: RemoteMutationRecordInsertChild[3],
   ): void;
 
   /**
    * Handles the `MUTATION_TYPE_REMOVE_CHILD` mutation record.
    */
   removeChild(
-    id: RemoteMutationRecordRemoveChild[1],
-    index: RemoteMutationRecordRemoveChild[2],
+    parentId: RemoteMutationRecordRemoveChild[1],
+    id: RemoteMutationRecordRemoveChild[2],
+  ): void;
+
+  /**
+   * Handles the `MUTATION_TYPE_MOVE_CHILD` mutation record.
+   */
+  moveChild(
+    fromParentId: RemoteMutationRecordMoveChild[1],
+    toParentId: RemoteMutationRecordMoveChild[2],
+    id: RemoteMutationRecordMoveChild[3],
+    nextSiblingId: RemoteMutationRecordMoveChild[4],
   ): void;
 
   /**
@@ -65,12 +77,14 @@ export function createRemoteConnection({
   call,
   insertChild,
   removeChild,
+  moveChild,
   updateText,
   updateProperty,
 }: RemoteConnectionHandler): RemoteConnection {
   const handlers = {
     [MUTATION_TYPE_INSERT_CHILD]: insertChild,
     [MUTATION_TYPE_REMOVE_CHILD]: removeChild,
+    [MUTATION_TYPE_MOVE_CHILD]: moveChild,
     [MUTATION_TYPE_UPDATE_TEXT]: updateText,
     [MUTATION_TYPE_UPDATE_PROPERTY]: updateProperty,
   };

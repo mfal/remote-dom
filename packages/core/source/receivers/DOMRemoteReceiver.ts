@@ -108,19 +108,18 @@ export class DOMRemoteReceiver {
       insertChild: (parentId, child, nextSiblingId) => {
         const parent =
           parentId === ROOT_ID ? this.root : attached.get(parentId)!;
+        const nextSibling = nextSiblingId
+          ? attached.get(nextSiblingId)!
+          : undefined;
         const normalizedChild = attach(child);
-
-        if (parent.contains(normalizedChild)) {
-          return;
-        }
 
         const existingTimeout = destroyTimeouts.get(parentId);
         if (existingTimeout) clearTimeout(existingTimeout);
 
-        if (nextSiblingId === undefined) {
-          parent.appendChild(normalizedChild);
+        if (nextSibling) {
+          parent.insertBefore(normalizedChild, nextSibling);
         } else {
-          parent.insertBefore(normalizedChild, attached.get(nextSiblingId)!);
+          parent.appendChild(normalizedChild);
         }
       },
       removeChild: (parentId, id) => {
@@ -137,6 +136,20 @@ export class DOMRemoteReceiver {
           destroyTimeouts.set(parentId, timeout as any);
         } else {
           detach(child);
+        }
+      },
+      moveChild: (_, toParentId, id, nextSiblingId) => {
+        const child = attached.get(id) as ChildNode;
+        const toParent =
+          toParentId === ROOT_ID ? this.root : attached.get(toParentId)!;
+        const nextSibling = nextSiblingId
+          ? attached.get(nextSiblingId)!
+          : undefined;
+
+        if (nextSibling) {
+          toParent.insertBefore(child, nextSibling);
+        } else {
+          toParent.appendChild(child);
         }
       },
       updateProperty: (

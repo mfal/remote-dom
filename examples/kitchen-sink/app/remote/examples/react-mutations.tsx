@@ -1,13 +1,13 @@
 /** @jsxRuntime automatic */
 /** @jsxImportSource react */
 
-import { createRemoteComponent } from '@mittwald/remote-dom-react';
-import { createRoot } from 'react-dom/client';
+import {createRemoteComponent} from '@mittwald/remote-dom-react';
+import {createRoot} from 'react-dom/client';
 
-import { useEffect, useState } from 'react';
-import type { RenderAPI } from '../../types.ts';
-import { Stack as StackElement, Text as TextElement } from '../elements.ts';
-import { useRenders } from './utils/react-hooks.ts';
+import {useEffect, useState} from 'react';
+import type {RenderAPI} from '../../types.ts';
+import {Stack as StackElement, Text as TextElement} from '../elements.ts';
+import {useRenders} from './utils/react-hooks.ts';
 
 const Stack = createRemoteComponent('ui-stack', StackElement);
 const Text = createRemoteComponent('ui-text', TextElement);
@@ -80,7 +80,6 @@ const Example2 = () => {
   );
 };
 
-
 const Example3 = () => {
   const renders = useRenders(2);
 
@@ -94,6 +93,23 @@ const Example3 = () => {
   );
 };
 
+const Example4 = () => {
+  const renders = useRenders(2);
+
+  return (
+    <Stack spacing testId="test-stack">
+      {renders === 1 && data1}
+      {renders === 1 && data2}
+      {renders === 1 && data3}
+      {renders === 1 && data4}
+      {renders === 2 && data4}
+      {renders === 2 && data1}
+      {renders === 2 && data3}
+      {renders === 2 && data2}
+      {renders === 2 && done}
+    </Stack>
+  );
+};
 
 function App({api}: {api: RenderAPI}) {
   const {example} = api;
@@ -104,6 +120,8 @@ function App({api}: {api: RenderAPI}) {
     <Example2 />
   ) : example === 'react-mutations-3' ? (
     <Example3 />
+  ) : example === 'react-mutations-4' ? (
+    <Example4 />
   ) : null;
 }
 

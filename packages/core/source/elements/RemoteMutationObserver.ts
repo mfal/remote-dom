@@ -1,11 +1,12 @@
 import {
   MUTATION_TYPE_INSERT_CHILD,
+  MUTATION_TYPE_MOVE_CHILD,
   MUTATION_TYPE_REMOVE_CHILD,
   MUTATION_TYPE_UPDATE_PROPERTY,
   MUTATION_TYPE_UPDATE_TEXT,
   ROOT_ID,
 } from '../constants.ts';
-import type { RemoteConnection, RemoteMutationRecord } from '../types.ts';
+import type {RemoteConnection, RemoteMutationRecord} from '../types.ts';
 import {
   connectRemoteNode,
   disconnectRemoteNode,
@@ -36,6 +37,11 @@ export class RemoteMutationObserver extends MutationObserver {
     super((records) => {
       const remoteRecords: RemoteMutationRecord[] = [];
 
+      const collectedAddedNodes = records.flatMap((r) =>
+        r.type === 'childList' ? Array.from(r.addedNodes) : [],
+      );
+      const movedRecordParentIds = new Map<Node, string>();
+
       for (const record of records) {
         const targetId = remoteId(record.target);
 
@@ -51,6 +57,11 @@ export class RemoteMutationObserver extends MutationObserver {
               return;
             }
 
+            if (collectedAddedNodes.includes(node)) {
+              movedRecordParentIds.set(node, targetId);
+              return;
+            }
+
             disconnectRemoteNode(node);
 
             remoteRecords.push([
@@ -61,6 +72,18 @@ export class RemoteMutationObserver extends MutationObserver {
           });
 
           record.addedNodes.forEach((node) => {
+            const movedRecordParentId = movedRecordParentIds.get(node);
+            if (movedRecordParentId) {
+              remoteRecords.push([
+                MUTATION_TYPE_MOVE_CHILD,
+                movedRecordParentId,
+                targetId,
+                remoteId(node),
+                record.nextSibling ? remoteId(record.nextSibling) : undefined,
+              ]);
+              return;
+            }
+
             connectRemoteNode(node, connection);
 
             remoteRecords.push([
@@ -135,8 +158,8 @@ export class RemoteMutationObserver extends MutationObserver {
     super.observe(target, {
       subtree: true,
       childList: true,
-      attributes: true,
       characterData: true,
+      attributes: false, // watched by RemoteElement
       ...options,
     });
   }
